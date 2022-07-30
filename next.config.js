@@ -6,9 +6,10 @@ module.exports = {
       'secure.gravatar.com',
       'vercel.wpengine.com',
       'img.icons8.com',
+      'images.unsplash.com'
     ],
   },
   experimental: {
-    outputStandalone: true,
+    //outputStandalone: true,
   },
 }

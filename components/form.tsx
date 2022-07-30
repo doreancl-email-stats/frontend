@@ -48,7 +48,6 @@ const Form = ({formId, linkForm, forNewLink = true}: Props) => {
     try {
       const [newLink, error] = await postLink(JSON.stringify(link))
 
-      console.log({newLink, error})
       // Throw error with status code in case Fetch API req failed
       if (error) {
         throw new Error(error)

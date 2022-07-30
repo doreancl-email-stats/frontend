@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import Link from "next/link";
 
-export function Profile() {
+export function SignIn() {
   return <div className="relative">
-    <Link href={"/protected"} passHref>
+    <Link href="http://localhost:3000/auth/google" passHref>
       <button
         className="relative z-10 block w-8 h-8 overflow-hidden rounded-full shadow focus:outline-none">
         <Image
