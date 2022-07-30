@@ -1,17 +1,21 @@
 import '../styles/index.css'
 import '../styles/index2.css'
 import type { AppProps } from 'next/app'
-import { SessionProvider } from "next-auth/react";
+import { SWRConfig } from 'swr';
+import fetchJson from "../lib/fetchJson";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider
-      // Provider options are not required but can be useful in situations where
-      // you have a short session maxAge time. Shown here with default values.
-      session={pageProps.session}
+    <SWRConfig
+      value={{
+        fetcher: fetchJson,
+        onError: (err) => {
+          console.error(err);
+        },
+      }}
     >
       <Component {...pageProps} />
-    </SessionProvider>
+    </SWRConfig>
   )
 
 }

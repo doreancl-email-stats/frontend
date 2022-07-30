@@ -9,3 +9,4 @@ https://github.com/tailwindcomponents/dashboard
 https://github.dev/nextauthjs/next-auth-typescript-example
 
 https://github.com/nextauthjs/next-auth/issues/1162
+https://github.com/dyarfi/nextjs-sequelize

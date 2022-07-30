@@ -1,6 +1,6 @@
 import {rest} from 'msw'
 
-const API_URL = "http://host.docker.internal:8080"
+const API_URL = "http://localhost:3000"
 const jsonData = [
   {
     "_id": "623f839a3d97bf6cf1dddb2a",

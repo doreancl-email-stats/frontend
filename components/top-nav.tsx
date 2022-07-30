@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Profile } from "./profile";
 import { NavAuth } from "./nav-auth";
+import { SignIn } from "./sign-in";
 
 export function TopNav() {
   return <header className="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600">

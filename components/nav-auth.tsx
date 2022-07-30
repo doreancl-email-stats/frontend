@@ -1,13 +1,22 @@
 import styles from "./nav.module.css"
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut } from "../lib/auth";
+import useUser from "../lib/useUser";
 
 export function NavAuth() {
 
-  const { data: session, status } = useSession()
+  const user = useUser();
+
+  let status = ''
+  let session = null
+
+  if (user) {
+    status = ''
+    session = { user: user }
+  }
+
   const loading = status === 'loading'
 
   return <div className="relative">
-
     <p
       className={`nojs-show ${
         !session && loading ? styles.loading : styles.loaded
@@ -19,12 +28,10 @@ export function NavAuth() {
                 You are not signed in
               </span>
           <a
-            href={`/api/auth/signin`}
+            // href={`/api/auth/signin`}
+            href={`http://localhost:3000/auth/google`}
             className={styles.buttonPrimary}
-            onClick={(e) => {
-              e.preventDefault()
-              signIn()
-            }}
+            // onClick={(e) => {e.preventDefault(signIn()}}
           >
             Sign in
           </a>
@@ -33,13 +40,13 @@ export function NavAuth() {
       {session?.user && (
         <>
               <span
-                style={{ backgroundImage: `url(${session.user.image})` }}
+                style={{ backgroundImage: `url(${session.user.profile.photos[0].value})` }}
                 className={styles.avatar}
               />
           <span className={styles.signedInText}>
                 <small>Signed in as</small>
                 <br/>
-                <strong>{session.user.email || session.user.name}</strong>
+                <strong>{session.user.profile.emails[0].value || session.user.profile.displayName}</strong>
               </span>
           <a
             href={`/api/auth/signout`}

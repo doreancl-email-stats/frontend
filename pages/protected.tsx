@@ -1,10 +1,8 @@
 import { Content } from "../components/content";
-import { getSession, useSession } from "next-auth/react";
 import { GetServerSideProps } from "next";
-import { Session } from "next-auth";
+import { getAppCookies, verifyToken } from '../middleware/utils';
 
-export default function Protected() {
-  const { data: session, status } = useSession()
+export default function Protected({ session }) {
   if (session) {
     return (
       <>
@@ -14,7 +12,6 @@ export default function Protected() {
       </>
     )
   }
-
   return (
     <>
       <Content>
@@ -24,11 +21,28 @@ export default function Protected() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps<{
-  session: Session | null
-}> = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { query, req } = context;
 
-  const seshion = await getSession(context);
+  const { jwt } = getAppCookies(req.headers);
+
+  if (!jwt) {
+    return {
+      props: {
+        session: 0,
+      },
+    }
+  }
+
+  const jwtData = verifyToken(jwt);
+
+  const { user } = jwtData
+
+  return {
+    props: {
+      session: jwt,
+    },
+  }
 
   if (0) {
     const res = await fetch('/api/simple');
@@ -39,7 +53,7 @@ export const getServerSideProps: GetServerSideProps<{
 
   return {
     props: {
-      session: seshion,
+      session: user,
     },
   }
 }
