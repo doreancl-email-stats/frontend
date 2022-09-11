@@ -1,26 +1,22 @@
+import cookie from 'cookie';
+import type { IncomingHttpHeaders } from 'http';
+import type { JwtPayload } from 'jsonwebtoken';
 import { verify } from 'jsonwebtoken';
-import { NextApiRequest } from "next";
-import { IncomingHttpHeaders } from "http";
 
-const SECRET_KEY = process.env.JWT_SECRET;
+const SECRET_KEY = process.env.JWT_SECRET || '';
 
-export function verifyToken(jwtToken: string) {
+export const verifyToken = (jwtToken: string): null | JwtPayload | string => {
   try {
     return verify(jwtToken, SECRET_KEY);
   } catch (e) {
-    console.log('e:', e);
+    console.log('verifyToken e:', e);
     return null;
   }
-}
+};
 
-export function getAppCookies(headers: IncomingHttpHeaders) {
-  const parsedItems = {};
+export function getAppCookies(headers: IncomingHttpHeaders): {} | null {
   if (headers.cookie) {
-    const cookiesItems = headers.cookie.split('; ');
-    cookiesItems.forEach(cookies => {
-      const parsedItem = cookies.split('=');
-      parsedItems[parsedItem[0]] = decodeURI(parsedItem[1]);
-    });
+    return cookie.parse(headers.cookie);
   }
-  return parsedItems;
+  return null;
 }

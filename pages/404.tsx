@@ -1,4 +1,4 @@
-import {Content} from "../components/content";
+import {Content} from "../components/oldLayout/content";
 import Link from "next/link";
 
 const NotFound = () => {

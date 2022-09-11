@@ -10,3 +10,14 @@ https://github.dev/nextauthjs/next-auth-typescript-example
 
 https://github.com/nextauthjs/next-auth/issues/1162
 https://github.com/dyarfi/nextjs-sequelize
+
+https://developers.google.com/drive/picker/guides/overview
+
+https://developers.google.com/identity/gsi/web/guides/display-button#javascript
+
+https://github.dev/cornflourblue/next-js-11-basic-authentication-example
+https://github.dev/vercel/next.js/tree/canary/examples/with-passport
+https://superprops-next.vercel.app/saas
+
+https://heroicons.com/
+https://headlessui.com/

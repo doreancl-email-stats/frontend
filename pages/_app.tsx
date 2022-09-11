@@ -1,23 +1,25 @@
-import '../styles/index.css'
-import '../styles/index2.css'
-import type { AppProps } from 'next/app'
-import { SWRConfig } from 'swr';
-import fetchJson from "../lib/fetchJson";
+import "../styles/index.css";
+import type { AppProps } from "next/app";
+import { AppWrapper } from "../context/AppWrapper";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SWRConfig
-      value={{
-        fetcher: fetchJson,
-        onError: (err) => {
-          console.error(err);
-        },
-      }}
-    >
+    <AppWrapper>
       <Component {...pageProps} />
-    </SWRConfig>
-  )
-
+    </AppWrapper>
+    /*  <SWRConfig
+          value={{
+            fetcher: fetchJson,
+            onError: (err) => {
+              console.error('MyApp', 14, err);
+            },
+          }}
+        >
+          {/!* <RouteGuard>
+            <p>with routeguard</p>
+          </RouteGuard> *!/}
+        </SWRConfig> */
+  );
 }
 
-export default MyApp
+export default MyApp;

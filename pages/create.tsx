@@ -1,5 +1,5 @@
-import Form from '../components/form'
-import {Content} from "../components/content";
+import Form from '../components/oldLayout/form'
+import {Content} from "../components/oldLayout/content";
 import {LinkType} from "../types/types";
 
 const CreateLink = () => {

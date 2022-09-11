@@ -1,44 +1,62 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { getToken, JWT } from 'next-auth/jwt';
-import { getSession } from "next-auth/react";
-import { google } from "googleapis";
+import { google } from 'googleapis';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type { JWT } from 'next-auth/jwt';
+
+import { getAppCookies, verifyToken } from '../../middleware/utils';
 
 const secret = process.env.SECRET;
 const clientId = process.env.GOOGLE_ID;
 const format = 'metadata';
 
 const clientSecret = process.env.GOOGLE_SECRET;
+
 const simple = async (token: JWT, pageToken = '') => {
   const auth = new google.auth.OAuth2({
     clientId,
     clientSecret,
   });
 
-  auth.setCredentials({
-    access_token: token.access_token,
-    refresh_token: token.refresh_token,
-  });
-  const gmail = google.gmail({ version: 'v1', auth: auth });
+  const credentials = {
+    accessToken: token.accessToken,
+    refreshToken: token.refreshToken,
+  };
+  auth.setCredentials(credentials);
+
+  const gmail = google.gmail({ version: 'v1', auth });
   const res1 = await gmail.users.messages.list({ userId: 'me' });
   console.log(res1.data);
   const res2 = await gmail.users.messages.get({
     userId: 'me',
     id: res1.data.messages[0].id,
-    format: format,
-    metadataHeaders: ['Date', 'Subject', 'From', 'To', 'Delivered-To']
+    format,
+    metadataHeaders: ['Date', 'Subject', 'From', 'To', 'Delivered-To'],
   });
   console.log(res2.data);
   console.log(res2.data.payload.headers);
-
 };
 
+async function _getSession(req: NextApiRequest, res: NextApiResponse) {
+  const { jwt } = getAppCookies(req.headers);
+  console.log(42, { jwt });
+  if (!jwt) {
+    return res.status(401).json({ statusText: ':p' });
+  }
+  const jwtData = verifyToken(jwt);
+
+  console.log({ jwtData });
+
+  return jwtData;
+}
+
 export default async function handler(req, res) {
-  const session = await getSession({ req });
+  console.log(37);
+  const session = await _getSession(req, res);
   if (!session) {
     return res.status(401).end();
   }
-  const token: JWT | null = await getToken({ req, secret, encryption: true });
-  const data = await simple(token);
+  // const token: JWT | null = await getToken({ req, secret, encryption: true });
+  const data = await simple(session.user);
   res.status(200).json(data);
-};
+}

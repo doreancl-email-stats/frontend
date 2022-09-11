@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import {Line} from 'react-chartjs-2';
-import {LinkType, StatType} from "../types/types";
+import {LinkType, StatType} from "../../types/types";
 import Link from "next/link";
 
 ChartJS.register(
@@ -123,7 +123,7 @@ export function Dashboard(props: { links: LinkType[], stats: StatType[] }) {
             <div className="relative block mt-2 sm:mt-0">
               <span className="absolute inset-y-0 left-0 flex items-center pl-2">
               </span>
-              <Link as={`/create/`} href="/create" passHref>
+              <Link as={`/create/`} href="/pages/create" passHref>
                 <button
                   className="px-4 py-2 text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700"> Crear
                 </button>

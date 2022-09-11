@@ -1,6 +1,6 @@
 import {LinksTableTh} from "./links-table-th";
 import Link from 'next/link'
-import {LinkType} from "../types/types";
+import {LinkType} from "../../types/types";
 
 type Props = {
   links: LinkType[],

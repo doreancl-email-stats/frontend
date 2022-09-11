@@ -2,10 +2,9 @@ import {GetServerSideProps} from "next";
 import {deleteLink, getPostAndMorePosts} from "../../lib/api";
 import {useState} from "react";
 import {useRouter} from "next/router";
-import Form from "../../components/form";
-import {Content} from "../../components/content";
+import Form from "../../components/oldLayout/form";
+import {Content} from "../../components/oldLayout/content";
 import {LinkType} from "../../types/types";
-
 
 type Props = {
   slug: string
