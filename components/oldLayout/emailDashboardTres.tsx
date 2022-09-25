@@ -56,7 +56,7 @@ const EmailDashboardTres = (props) => {
       <p>2</p>
       {data && state.stats && (
         <>
-          <p>Labels:</p>
+          <p>messages:</p>
           <ApexCharts
             options={data.options}
             series={data.series}

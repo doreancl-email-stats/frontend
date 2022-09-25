@@ -7,12 +7,12 @@ const fetcher = (url) =>
       return data;
     });
 
-export const useGetLabels = () => {
-  const { data, error } = useSWR("/api/google/gmail/labels", fetcher);
+export const useGetMessages = () => {
+  const { data, error } = useSWR("/api/google/gmail/messages", fetcher);
   return [data || null, error];
 };
 
-export const useGetHeaders = (id: string) => {
-  const { data, error } = useSWR(`/api/google/gmail/headers/${id}`, fetcher);
+export const useGetMessage = (id: string) => {
+  const { data, error } = useSWR(`/api/google/gmail/messages/${id}`, fetcher);
   return [data || null, error];
 };

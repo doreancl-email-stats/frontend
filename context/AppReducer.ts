@@ -1,45 +1,67 @@
-export const initialState1 = {
-  number: 0,
+import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
+
+export type Stats = {
+  labels: [];
+  from: [];
+  to: [];
+};
+export type State = {
+  stats: Stats;
+  messages_list: gmail_v1.Schema$Message[];
+  messages: gmail_v1.Schema$Message[];
+};
+
+export const initialState1: State = {
   stats: {
     labels: [],
     from: [],
     to: [],
   },
-  labels: [],
-  headers: {},
+  messages_list: [],
+  messages: [],
 };
 
-import superData from "../mocks/data/session.json";
+export const initialState = initialState1;
 
-export const initialState = superData;
+export type Action =
+  | { type: "init_stored"; value: State }
+  | { type: "add_messages_list"; value: gmail_v1.Schema$Message[] }
+  | { type: "add_message"; value: gmail_v1.Schema$Message }
+  | { type: "add_stats_label"; value: any }
+  | { type: "add_stats_fromto"; value: any }
+  | { type: "load_stat_1"; value: any };
 
-export const AppReducer = (state, action) => {
+export const AppReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "init_stored": {
+      console.log(111111, "init_stored", action.value);
+
       return action.value;
     }
 
-    case "add_number": {
+    case "add_messages_list": {
+      console.log(22222, "add_messages_list", action.value);
+
       return {
         ...state,
-        number: action.value + state.number,
+        messages_list: action.value,
       };
     }
 
-    case "add_labels": {
-      return {
-        ...state,
-        labels: action.value,
-      };
-    }
+    case "add_message": {
+      const found = state.messages.find(
+        (message) => message.id === action.value.id
+      );
+      console.log(33333, undefined != found, "add_message", action.value.id);
 
-    case "add_headers": {
+      if (undefined != found) {
+        return state;
+      }
+
+      state.messages.push(action.value);
       return {
         ...state,
-        headers: {
-          ...state.headers,
-          [action.value.id]: action.value,
-        },
+        messages: state.messages,
       };
     }
 
@@ -70,7 +92,6 @@ export const AppReducer = (state, action) => {
         },
       };
     }
-
     case "add_stats_fromto": {
       const { from, to } = state.stats;
 
@@ -97,31 +118,6 @@ export const AppReducer = (state, action) => {
           to: [...to],
           from: [...from],
         },
-      };
-    }
-
-    case "load_stat_1": {
-
-      const labels = {
-        ...state.stats.labels,
-      };
-
-      const { id, labelIds } = action.value;
-
-      if (labelIds) {
-        for (const label of labelIds) {
-          if (undefined === labels[label]) {
-            labels[label] = [];
-          }
-
-          if (labels[label].indexOf(id) === -1) {
-            labels[label].push(id);
-          }
-        }
-      }
-      
-      return {
-        ...state,
       };
     }
   }

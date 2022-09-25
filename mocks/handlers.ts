@@ -1,49 +1,41 @@
-import {rest} from 'msw'
+import { rest } from "msw";
+import userJsonData from "./data/user.json" assert { type: "json" };
 
-const API_URL = "http://localhost:3000"
-const jsonData = [
-  {
-    "_id": "623f839a3d97bf6cf1dddb2a",
-    "title": "juanito",
-    "link": "juanito",
-    "long_url": "https://reqres.in/img/faces/2-image.jpg",
-    "is_active": true,
-    "__v": 0
-  },
-  {
-    "_id": "62405da6ee38616d5bba07c8",
-    "title": "scoppiap",
-    "link": "scoppiap",
-    "long_url": "https://reqres.in/img/faces/2-image.jpg",
-    "is_active": true,
-    "createdAt": "2022-03-27T12:50:46.630Z",
-    "updatedAt": "2022-03-27T12:50:46.630Z",
-    "__v": 0
-  }
+const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
+const BFF_API_URL = process.env.NEXT_PUBLIC_BFF_API_URL;
+
+const BFF_Handalers = [
+  rest.get(BFF_API_URL + "/api/user/", (req, res, ctx) => {
+    return res(ctx.json(userJsonData));
+  }),
 ];
 
-const _handlers = [
-  rest.get(API_URL + '/link/', (req, res, ctx) => {
-    return res(
-      ctx.json(jsonData)
-    )
-  }),
-  rest.put(API_URL + '/link/:id', (req, res, ctx) => {
-    return res(
-      ctx.json(jsonData[0])
-    )
-  })
-]
-
-for (const link of jsonData) {
-  _handlers.push(
-    rest.get(API_URL + '/link/' + link._id, (req, res, ctx) => {
-      return res(
-        ctx.json(link)
-      )
-    })
-  )
+function randomInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export const handlers = _handlers;
+const _hanadlers = [
+  rest.get(
+    `${BFF_API_URL}/api/stats/total_unraead_emails?from=:form&to=:to}`,
+    (req, res, ctx) => {
+      return res(ctx.json({ count: randomInteger(500, 100) }));
+    }
+  ),
+  rest.get(
+    `${BFF_API_URL}/api/stats/total_promotions_emails`,
+    (req, res, ctx) => {
+      return res(ctx.json({ count: randomInteger(500, 100) }));
+    }
+  ),
+  rest.get(
+    `${BFF_API_URL}/api/stats/total_received_emails`,
+    (req, res, ctx) => {
+      return res(ctx.json({ count: randomInteger(500, 100) }));
+    }
+  ),
+  rest.get(`${BFF_API_URL}/api/stats/total_sent_emails`, (req, res, ctx) => {
+    return res(ctx.json({ count: randomInteger(500, 100) }));
+  }),
+];
 
+export const handlers = [].concat([]);

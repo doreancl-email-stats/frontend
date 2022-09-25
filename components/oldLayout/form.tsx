@@ -1,16 +1,16 @@
-import {useState} from 'react'
-import {useRouter} from 'next/router'
-import {mutate} from 'swr'
-import {LinkType} from "../../types/types";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
+import { LinkType } from "../../types/types";
 import LinkFormInput from "./linkFormInput";
-import {postLink, putLink} from "../../lib/api";
+import { postLink, putLink } from "../../lib/api";
 import Link from "next/link";
 
 type Props = {
-  formId: string,
-  linkForm: LinkType,
-  forNewLink?: boolean,
-}
+  formId: string;
+  linkForm: LinkType;
+  forNewLink?: boolean;
+};
 
 const Form = ({formId, linkForm, forNewLink = true}: Props) => {
   const router = useRouter()
@@ -99,7 +99,7 @@ const Form = ({formId, linkForm, forNewLink = true}: Props) => {
           <LinkFormInput onChange={handleChange} label={'Long Url'} name={'long_url'} value={link.long_url}/>
         </div>
         <div className="flex justify-between mt-4">
-          <Link as={`/`} href="/pages" passHref>
+          <Link as={`/`} href="/index1.tsx" passHref>
             <button className="px-4 py-2 text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
               Volver
             </button>

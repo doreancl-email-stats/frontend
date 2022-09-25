@@ -1,13 +1,34 @@
 import type { GetServerSideProps } from "next";
-import useGetSession from "../lib/hooks-users";
-import Layout from "../components/newLayout/layout";
+
+import { Content } from "../components/oldLayout/content";
+import { useGetSessionHook } from "../lib/hooks-users";
+import EmailDashboard from "../components/oldLayout/emailDashboard";
 
 const Index = () => {
-  const [session, error] = useGetSession({});
+  const [session, error] = useGetSessionHook({});
 
   return (
     <>
-      <Layout />
+      <Content>
+        {session && false && (
+          <>
+            <p>Currently logged in as:</p>
+            <pre>{JSON.stringify(session, null, 2)}</pre>
+          </>
+        )}
+
+        {session && (
+          <>
+            <EmailDashboard />
+          </>
+        )}
+        {error && (
+          <>
+            <p>Error:</p>
+            <pre>{JSON.stringify(error, null, 2)}</pre>
+          </>
+        )}
+      </Content>
     </>
   );
 };

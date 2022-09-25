@@ -1,81 +1,85 @@
-export const getTotalSentEmails = (state) => {
-  return 1;
-};
+import useSWR from "swr";
 
-export const getReceivedEmailsHistogram = (state) => {
-  return getFromHistogramWithFilter({
-    state,
-    excludedLabel: "SENT",
-  });
-};
+const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
+const BFF_API_URL = process.env.NEXT_PUBLIC_BFF_API_URL;
 
-export const getSendedEmailsHistogram = (state) => {
-  return getFromHistogramWithFilter({
-    state,
-    onlyLabel: "SENT",
-  });
-};
-
-export const getFromHistogramWithFilter = ({
-  state,
-  onlyLabel = null,
-  excludedLabel = null,
-}) => {
-  //benchmark time
-  var sortedObjs: any[];
-  const start = new Date().getTime();
-  const dataset = [];
-
-  try {
-    const { headers } = state;
-    const dates = {};
-
-    const entries = Object.entries(headers);
-    entries.map((k) => {
-      const [id, header] = k;
-
-      try {
-        const { labelIds } = header;
-
-        if (onlyLabel && !labelIds.includes(onlyLabel)) {
-          return;
-        }
-
-        if(excludedLabel && labelIds.includes(excludedLabel)){
-          return;
-        }
-
-        const internalDate = header.internalDate / 1000;
-        if (!internalDate) return;
-
-        const date = new Date(internalDate * 1000);
-        const month = date.getMonth();
-        //create date with format
-        //const dateFormatted = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`;
-        const dateFormatted = `${date.getFullYear()}-${(
-          "0" +
-          (date.getMonth() + 1)
-        ).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
-        if (undefined === dates[dateFormatted]) {
-          dates[dateFormatted] = 0;
-        }
-        dates[dateFormatted]++;
-      } catch (e) {
-        return;
-      }
+const fetcher = (url) =>
+  fetch(url)
+    .then((r) => r.json())
+    .catch((e) => {
+      console.log("error", e);
     });
 
-    for (const [key, value] of Object.entries(dates)) {
-      dataset.push({ x: new Date(key).getTime(), y: value });
-    }
+const fetcherWithParameters = (url, parameters = "") => {
+  // Example fetch to demonstrate the logic
+  console.log(`${url}${parameters}`);
+  return fetch(`${url}${parameters}`)
+    .then((r) => r.json())
+    .catch((e) => {
+      console.error(e);
+    });
+};
 
-    dataset.sort((a, b) => (a.x > b.x ? 1 : -1));
-  } catch (e) {
-    console.log(e);
-  }
+interface TimestampBetween {
+  from: Date;
+  to: Date;
+}
 
-  const end = new Date().getTime();
-  const time = end - start;
-  console.log("time to load data: ", time);
-  return dataset;
+interface TimestampBetweenGrouped extends TimestampBetween {
+  groupBy: string;
+}
+
+const useGenericEffect = ({ url }) => {
+  const { data, error } = useSWR(url);
+  const loading = !data && !error;
+  return { loading, data, error };
+};
+
+const onGenericEffectWithParams = async ({ url, parameters }) => {
+  //const { data, error } = fetch([url, parameters], fetcherWithParameters);
+
+  const res = await fetch(`${url}${parameters}`);
+  const data: any = await res.json();
+
+  return {
+    loading: false,
+    data,
+    error: undefined,
+  };
+};
+
+export const onGetUnreadEmails = async ({ from, to }: TimestampBetween) => {
+  return await onGenericEffectWithParams({
+    url: `${API_URL}/stats/total_unread_emails`,
+    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+  });
+};
+export const onGetPromotionsEmails = async ({ from, to }: TimestampBetween) => {
+  return await onGenericEffectWithParams({
+    url: `${API_URL}/stats/total_promotions_emails`,
+    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+  });
+};
+export const onGetReceivedEmails = async ({ from, to }: TimestampBetween) => {
+  return await onGenericEffectWithParams({
+    url: `${API_URL}/stats/total_received_emails`,
+    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+  });
+};
+export const onGetSentEmails = async ({ from, to }: TimestampBetween) => {
+  return await onGenericEffectWithParams({
+    url: `${API_URL}/stats/total_sent_emails`,
+    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+  });
+};
+
+export const onGetTopInteractions = async ({
+  from,
+  to,
+  groupBy,
+}: TimestampBetweenGrouped) => {
+  return await onGenericEffectWithParams({
+    url: `${API_URL}/stats/top_interactions`,
+    parameters: `?from=${from.getTime()}&to=${to.getTime()}&group_by=${groupBy}`,
+  });
 };

@@ -1,13 +1,13 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import { NavAuth } from './nav-auth';
-import { Profile } from './profile';
+import { NavAuth } from "./nav-auth";
+import { Profile } from "./profile";
 
 export function TopNav() {
   return (
     <header className="flex items-center justify-between border-b-4 border-indigo-600 bg-white px-6 py-4">
       <div className="flex items-center">
-        <Link as={`/`} href="/pages" passHref>
+        <Link as={`/`} href="/index1.tsx" passHref>
           <svg
             className="h-12 w-12"
             viewBox="0 0 512 512"

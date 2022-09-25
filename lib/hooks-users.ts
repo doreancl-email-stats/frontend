@@ -1,8 +1,14 @@
 import Router from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
+import { Session } from "../types/userjwt";
 
-import type { Session } from "../types/userjwt";
+if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
+  require("../mocks");
+}
+
+const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
+const BFF_API_URL = process.env.NEXT_PUBLIC_BFF_API_URL;
 
 type UseUserProps = {
   redirectTo?: string;
@@ -16,25 +22,31 @@ const fetcher = (url) =>
       return data;
     });
 
-export function useGetSession2() {
-  const { data, error } = useSWR(`/api/user`, fetcher);
+export const getSession = async ({
+  redirectTo,
+  redirectIfFound,
+}: UseUserProps) => {
+  //const { data, error } = useSWR("/api/user/", fetcher);
+  const data = await fetch(`${BFF_API_URL}/api/user/`);
+  console.log({ data });
+  const error = null;
+  const user = data?.user;
+  const finished = Boolean(data);
+  const hasUser = Boolean(user);
 
-  useEffect(() => {
-    console.log("25252525", { data, error });
-  }, [data, error]);
+  // if no redirect needed, just return (example: already on /dashboard)
+  // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
+  //if (!redirectTo || !finished) return;
 
-  return {
-    session: data,
-    isLoading: !error && !data,
-    isError: error,
-  };
-}
+  // return error ? null : user;
+  return [data || null, error];
+};
 
-const useGetSession = ({
+export const useGetSessionHook = ({
   redirectTo,
   redirectIfFound,
 }: UseUserProps): [Session | null, Error | undefined] => {
-  const { data, error } = useSWR("/api/user", fetcher);
+  const { data, error } = useSWR(`${BFF_API_URL}/api/user/`, fetcher);
   const user = data?.user;
   const finished = Boolean(data);
   const hasUser = Boolean(user);
@@ -58,4 +70,3 @@ const useGetSession = ({
   // return error ? null : user;
   return [data || null, error];
 };
-export default useGetSession;

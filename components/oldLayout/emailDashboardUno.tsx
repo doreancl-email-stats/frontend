@@ -38,7 +38,7 @@ const EmailDashboardUno = (props) => {
     console.log("loading chart1", dataset);
 
     const data = {
-      labels: labels,
+      messages: labels,
       datasets: [
         {
           label: "My First Dataset",

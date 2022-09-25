@@ -7,6 +7,7 @@ import {
 import React, { useEffect } from "react";
 import BasicTableRow from "./basicTableRow";
 import { useAppContext } from "../../context/AppWrapper";
+import { useGetMessages } from "../../lib/hooks-google";
 
 type EmailRow = {
   id: string;
@@ -50,22 +51,23 @@ const columns = [
 
 const BasicTable = () => {
   const [data, setData] = React.useState(() => []);
-  const [labels, error1] = React.useState(() => []);
-  //const [labels, error1] = useGetLabels();
+  //const [messages, error1] = React.useState(() => []);
+  const [messages, error1] = useGetMessages();
   const [state, dispatch] = useAppContext();
 
   useEffect(() => {
-    if (labels && labels?.length > 0) {
-      dispatch({ type: "add_labels", value: labels });
+    if (messages && messages?.length > 0) {
+      console.log("dispatch-add_messages_list", { type: "add_messages_list", value: messages });
+      dispatch({ type: "add_messages_list", value: messages });
     }
-  }, [labels]);
+  }, [messages]);
 
   useEffect(() => {
-    if (!state || !state.labels) return;
-    if (state?.labels.length > 0) {
-      setData(state.labels);
+    if (!state || !state.messages_list) return;
+    if (state?.messages_list.length > 0) {
+      setData(state.messages_list);
     }
-  }, [state.labels]);
+  }, [state]);
 
   const table = useReactTable({
     data,

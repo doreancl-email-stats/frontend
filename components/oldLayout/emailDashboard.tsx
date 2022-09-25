@@ -29,12 +29,12 @@ const EmailDashboard = (props) => {
     <>
       <p>oli</p>
       {state.stats && (
-        <div style={{ fontSize: "10px" }}>
+        <div style={{ fontSize: "20px" }}>
           <div>
-            <h2>total messages reveived: {state.labels.length}</h2>
+            <h2>total messages reveived: {state.messages.length}</h2>
           </div>
-          <p>Labels:</p>
-          {Object.entries(state.stats.labels).map(([key, value]) => {
+          <p>messages:</p>
+          {Object.entries(state.stats.messages_list).map(([key, value]) => {
             return (
               <div key={key}>
                 <h2>

@@ -17,6 +17,7 @@ const ColumnBasic = () => {
       chart: {
         type: "bar",
         toolbar: { show: false },
+        width: "100%",
       },
       tooltip: {
         fixed: {
