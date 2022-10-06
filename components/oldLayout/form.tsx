@@ -99,7 +99,7 @@ const Form = ({formId, linkForm, forNewLink = true}: Props) => {
           <LinkFormInput onChange={handleChange} label={'Long Url'} name={'long_url'} value={link.long_url}/>
         </div>
         <div className="flex justify-between mt-4">
-          <Link as={`/`} href="/index1.tsx" passHref>
+          <Link as={`/`} href="/index.tsx" passHref>
             <button className="px-4 py-2 text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
               Volver
             </button>

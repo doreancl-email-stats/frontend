@@ -2,12 +2,13 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import HeroChartElement from "./hero-chart-element";
 import { useAppContext } from "../../context/AppWrapper";
-import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
 import EmailDashboardDos from "../oldLayout/emailDashboardDos";
 import {
   onGetPromotionsEmails,
   onGetReceivedEmails,
+  onGetReceivedEmailsHistogram,
   onGetSentEmails,
+  onGetSentEmailsHistogram,
   onGetTopInteractions,
   onGetUnreadEmails,
 } from "../../lib/hooks-stats";
@@ -25,6 +26,17 @@ const ble = {
   data: [],
   error: null,
 };
+
+const headersTopByAddress = [
+  { name: "email_address", display: "Email" },
+  { name: "interactions", display: "Interactions" },
+  { name: "sent_messages", display: "Sent Smessages" },
+  { name: "received_messages", display: "Received messages" },
+];
+const headersTopByDomain = [
+  { name: "domain", display: "Domain" },
+  { name: "interactions", display: "Interactions" },
+];
 
 export default function Dashboard1() {
   const [state, dispatch] = useAppContext();
@@ -50,6 +62,8 @@ export default function Dashboard1() {
   const [sentEmailsPrevious, setSentEmailsPrevious] = useState(bla);
   const [topInteractionsByAddress, setTopInteractionsByAddress] = useState(ble);
   const [topInteractionsByDomain, setTopInteractionsByDomain] = useState(ble);
+  const [receivedEmailsHistogram, setReceivedEmailsHistogram] = useState(ble);
+  const [sentEmailsHistogram, setSentEmailsHistogram] = useState(ble);
 
   useEffect(() => {
     console.log("----dashboard1.tsx--INIT--");
@@ -84,21 +98,18 @@ export default function Dashboard1() {
       setTopInteractionsByDomain(
         await onGetTopInteractions({ ...timestapCurrent, groupBy: "domain" })
       );
+      const la = await onGetReceivedEmailsHistogram({
+        ...timestapCurrent,
+        unit: "days",
+      });
+      const le = await onGetSentEmailsHistogram({
+        ...timestapCurrent,
+        unit: "days",
+      });
+      setReceivedEmailsHistogram(la);
+      setSentEmailsHistogram(le);
     })();
   }, []);
-
-  const headersTopByAddress = [
-    { name: "email_address", display: "Email" },
-    { name: "interactions", display: "Interactions" },
-    { name: "sent_messages", display: "Sent Smessages" },
-    { name: "received_messages", display: "Received messages" },
-  ];
-  const headersTopByDomain = [
-    { name: "domain", display: "Domain" },
-    { name: "interactions", display: "Interactions" },
-  ];
-  console.log(topInteractionsByAddress);
-  console.log(topInteractionsByDomain);
 
   function roundPercent(current, previous) {
     return Math.round((current / previous - 1) * 100);
@@ -114,7 +125,7 @@ export default function Dashboard1() {
           </div>
           <div>Past mont</div>
         </div>
-        <div className="grid grid-cols-4 border-r">
+        <div className="grid grid-cols-4 border-r border-b">
           {unreadEmails.loading || unreadEmails.error ? (
             <HeroChartElement />
           ) : (
@@ -125,7 +136,7 @@ export default function Dashboard1() {
                 unreadEmails.data.count,
                 unreadEmailsPrevious.data.count
               )}
-            />
+            ></HeroChartElement>
           )}
           {promotionsEmails.loading || promotionsEmails.error ? (
             <HeroChartElement />
@@ -137,8 +148,37 @@ export default function Dashboard1() {
                 promotionsEmails.data.count,
                 promotionsEmailsPrevious.data.count
               )}
-            />
+            ></HeroChartElement>
           )}
+          {receivedEmails.loading || receivedEmails.error ? (
+            <HeroChartElement />
+          ) : (
+            <HeroChartElement
+              title="Some Messages"
+              current={receivedEmails.data.count}
+              previousPercentage={roundPercent(
+                receivedEmails.data.count,
+                receivedEmailsPrevious.data.count
+              )}
+            ></HeroChartElement>
+          )}
+          {sentEmails.loading || sentEmails.error ? (
+            <HeroChartElement />
+          ) : (
+            <HeroChartElement
+              title="Other Messages"
+              current={sentEmails.data.count}
+              previousPercentage={roundPercent(
+                sentEmails.data.count,
+                sentEmailsPrevious.data.count
+              )}
+            ></HeroChartElement>
+          )}
+        </div>
+      </div>
+
+      <div className="bg-white shadow-lg flex flex-col mt-3">
+        <div className="grid grid-cols-2 border-r">
           {receivedEmails.loading || receivedEmails.error ? (
             <HeroChartElement />
           ) : (
@@ -149,7 +189,14 @@ export default function Dashboard1() {
                 receivedEmails.data.count,
                 receivedEmailsPrevious.data.count
               )}
-            />
+            >
+              {false === receivedEmailsHistogram.loading && (
+                <EmailDashboardDos
+                  data={receivedEmailsHistogram.data}
+                  type="area"
+                />
+              )}
+            </HeroChartElement>
           )}
           {sentEmails.loading || sentEmails.error ? (
             <HeroChartElement />
@@ -161,58 +208,18 @@ export default function Dashboard1() {
                 sentEmails.data.count,
                 sentEmailsPrevious.data.count
               )}
-            />
-          )}
-          {false && (
-            <div className="p-3 border-l">
-              <div>
-                <div>Recipients</div>
-                <div className="font-medium text-xs text-gray-400 ">
-                  Feb 20 - Mar19, 2022
-                </div>
-              </div>
-              <div className="flex flex-row items-center mt-4">
-                <div className="text-lg">{state.stats.to.length}</div>
-                <div className="flex flex-row text-sm ml-1 bg-green-200 items-center rounded-3xl ">
-                  <ArrowUpCircleIcon className="w-5 text-green-600" />
-                  <div className="text-sm text-green-600 pr-1">
-                    {(state.stats.to.length * 100) / state.stats.to.length} %
-                  </div>
-                </div>
-              </div>
-              <div className="border-2">
-                {receivedHistogram && (
-                  <EmailDashboardDos data={sendedHistogram} type="line" />
-                )}
-              </div>
-            </div>
-          )}
-          {false && (
-            <div className="p-3 border-l">
-              <div>
-                <div>Senders</div>
-                <div className="font-medium text-xs text-gray-400 ">
-                  Feb 20 - Mar19, 2022
-                </div>
-              </div>
-              <div className="flex flex-row items-center mt-4">
-                <div className="text-lg">{state.stats.from.length}</div>
-                <div className="flex flex-row text-sm ml-1 bg-green-200 items-center rounded-3xl ">
-                  <ArrowUpCircleIcon className="w-5 text-green-600" />
-                  <div className="text-sm text-green-600 pr-1">
-                    {(state.stats.from.length * 100) / state.stats.from.length}{" "}
-                    %
-                  </div>
-                </div>
-              </div>
-              <div className="border-2">
-                {receivedHistogram && (
-                  <EmailDashboardDos data={receivedHistogram} type="line" />
-                )}
-              </div>
-            </div>
+            >
+              {false === sentEmailsHistogram.loading && (
+                <EmailDashboardDos
+                  data={sentEmailsHistogram.data}
+                  type="area"
+                />
+              )}
+            </HeroChartElement>
           )}
         </div>
+
+        {/*
         <div className="px-3 py-4 flex flex-row justify-between border">
           <div className="flex flex-row gap-2 items-center">
             <div>
@@ -272,6 +279,7 @@ export default function Dashboard1() {
             </button>
           </div>
         </div>
+        */}
       </div>
 
       <div className="bg-white shadow-lg mt-3 flex flex-row">
@@ -279,10 +287,10 @@ export default function Dashboard1() {
           <div className="border-y p-3 flex flex-row justify-between items-center">
             <div className="flex flex-row">
               <div className="font-medium border-b-2 border-blue-600">
-                Top Streaming Tracks
+                Top addresses
               </div>
-              <div className="font-medium text-gray-400 ml-3">
-                Top Downloaded Tracks
+              <div className="hidden font-medium text-gray-400 ml-3">
+                Top sended emails
               </div>
             </div>
             <div className="">
@@ -295,96 +303,93 @@ export default function Dashboard1() {
             <div>
               <table className="border-collapse table-auto w-full text-sm">
                 <thead>
-                <tr>
-                  {headersTopByAddress.map((header, index) => {
-                    return (
-                      <th
-                        className="border-b font-medium p-3 text-slate-400 text-left"
-                        key={index}
-                      >
-                        {header.display}
-                      </th>
-                    );
-                  })}
-                </tr>
+                  <tr>
+                    {headersTopByAddress.map((header, index) => {
+                      return (
+                        <th
+                          className="border-b font-medium p-3 text-slate-400 text-left"
+                          key={index}
+                        >
+                          {header.display}
+                        </th>
+                      );
+                    })}
+                  </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-slate-800">
-                {topInteractionsByAddress.data.map((interaction, index) => {
-                  return (
-                    <tr key={index}>
-                      <td className="border-b border-slate-100 px-3 text-slate-500">
-                        {interaction.email_address}
-                      </td>
-                      <td className="border-b border-slate-100 px-3 text-slate-500">
-                        {interaction.sent_messages +
-                          interaction.received_messages}
-                      </td>
-                      <td className="border-b border-slate-100 px-3 text-slate-500">
-                        {interaction.sent_messages}
-                      </td>
-                      <td className="border-b border-slate-100 px-3 text-slate-500">
-                        {interaction.received_messages}
-                      </td>
-                    </tr>
-                  );
-                })}
+                  {topInteractionsByAddress.data.map((interaction, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="border-b border-slate-100 px-3 text-slate-500">
+                          {interaction.email_address}
+                        </td>
+                        <td className="border-b border-slate-100 px-3 text-slate-500">
+                          {interaction.sent_messages +
+                            interaction.received_messages}
+                        </td>
+                        <td className="border-b border-slate-100 px-3 text-slate-500">
+                          {interaction.sent_messages}
+                        </td>
+                        <td className="border-b border-slate-100 px-3 text-slate-500">
+                          {interaction.received_messages}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
           </div>
           <div className="py-5 flex justify-center font-medium text-gray-400">
-            VIEW ALL TOP TRACKS
+            VIEW ALL TOP ADDRESSES
           </div>
         </div>
 
         <div className="border px-3 pt-3 flex flex-col basis-1/3">
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row  justify-between items-center">
             <div className="flex flex-row">
-              <div className="font-medium">Top Artists</div>
+              <div className="font-medium">Top Domains</div>
             </div>
             <div className="">
-              <button className="px-5 py-2.5 text-sm leading-5 rounded-md font-semibold border-2">
-                This Month
-              </button>
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col mt-8">
             <div>
               <table className="border-collapse table-auto w-full text-sm">
                 <thead>
-                <tr>
-                  {headersTopByDomain.map((header, index) => {
-                    return (
-                      <th
-                        className="border-b font-medium text-slate-400 "
-                        key={index}
-                      >
-                        {header.display}
-                      </th>
-                    );
-                  })}
-                </tr>
+                  <tr>
+                    {headersTopByDomain.map((header, index) => {
+                      return (
+                        <th
+                          className="border-b font-medium p-3 text-slate-400 text-left"
+                          key={index}
+                        >
+                          {header.display}
+                        </th>
+                      );
+                    })}
+                  </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-slate-800">
-                {topInteractionsByDomain.data.map((interaction, index) => {
-                  return (
-                    <tr key={index}>
-                      <td className="border-b border-slate-100 text-slate-500">
-                        {interaction.email_address}
-                      </td>
-                      <td className="border-b border-slate-100 text-slate-500">
-                        {interaction.sent_messages +
-                          interaction.received_messages}
-                      </td>
-                    </tr>
-                  );
-                })}
+                  {topInteractionsByDomain.data.map((interaction, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="border-b border-slate-100 text-slate-500">
+                          {interaction.email_address}
+                        </td>
+                        <td className="border-b border-slate-100 text-slate-500">
+                          {interaction.sent_messages +
+                            interaction.received_messages}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
           </div>
           <div className="py-5 flex justify-center font-medium text-gray-400 grow">
-            <div className="self-end">VIEW ALL TOP ARTISTS</div>
+            <div className="self-end">VIEW ALL TOP DOMAINS</div>
           </div>
         </div>
       </div>

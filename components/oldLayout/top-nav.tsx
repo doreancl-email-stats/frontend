@@ -7,7 +7,7 @@ export function TopNav() {
   return (
     <header className="flex items-center justify-between border-b-4 border-indigo-600 bg-white px-6 py-4">
       <div className="flex items-center">
-        <Link as={`/`} href="/index1.tsx" passHref>
+        <Link as={`/`} href="/index.tsx" passHref>
           <svg
             className="h-12 w-12"
             viewBox="0 0 512 512"

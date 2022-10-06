@@ -29,6 +29,10 @@ interface TimestampBetweenGrouped extends TimestampBetween {
   groupBy: string;
 }
 
+interface TimestampBetweenWithUnit extends TimestampBetween {
+  unit: string;
+}
+
 const useGenericEffect = ({ url }) => {
   const { data, error } = useSWR(url);
   const loading = !data && !error;
@@ -70,6 +74,26 @@ export const onGetSentEmails = async ({ from, to }: TimestampBetween) => {
   return await onGenericEffectWithParams({
     url: `${API_URL}/stats/total_sent_emails`,
     parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+  });
+};
+export const onGetReceivedEmailsHistogram = async ({
+  from,
+  to,
+  unit,
+}: TimestampBetweenWithUnit) => {
+  return await onGenericEffectWithParams({
+    url: `${API_URL}/stats/received_emails_histogram`,
+    parameters: `?from=${from.getTime()}&to=${to.getTime()}&unit=${unit}`,
+  });
+};
+export const onGetSentEmailsHistogram = async ({
+  from,
+  to,
+  unit,
+}: TimestampBetweenWithUnit) => {
+  return await onGenericEffectWithParams({
+    url: `${API_URL}/stats/sent_emails_histogram`,
+    parameters: `?from=${from.getTime()}&to=${to.getTime()}&unit=${unit}`,
   });
 };
 
