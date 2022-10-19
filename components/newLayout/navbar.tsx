@@ -32,7 +32,7 @@ export default function Navbar() {
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16  justify-between">
-              <div className="flex">
+              <div className="flex cursor-not-allowed">
                 <div className="border-r flex items-center pr-6">
                   <img
                     className="h-8 w-8"
@@ -51,7 +51,8 @@ export default function Navbar() {
                         item.current
                           ? "text-blue-500"
                           : "text-gray-500 hover:text-blue-500",
-                        "px-3 py-2 rounded-md text-sm font-medium"
+                        "px-3 py-2 rounded-md text-sm font-medium",
+                        "cursor-not-allowed"
                       )}
                       aria-current={item.current ? "page" : undefined}
                     >
@@ -64,7 +65,8 @@ export default function Navbar() {
                 <div className="ml-4 flex items-center md:ml-6">
                   <button
                     type="button"
-                    className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800
+                    cursor-not-allowed"
                   >
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -73,7 +75,8 @@ export default function Navbar() {
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800
+                      cursor-not-allowed">
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"

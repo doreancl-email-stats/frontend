@@ -1,9 +1,9 @@
 import BasicTable from "../components/oldLayout/basicTable";
 import { Content } from "../components/oldLayout/content";
-import useGetSession from "../lib/hooks-users";
+import { useGetSessionHook } from "../lib/hooks-users";
 
 const Protected = () => {
-  const [session, error] = useGetSession({});
+  const [session, error] = useGetSessionHook({});
 
   if (session) {
     return (

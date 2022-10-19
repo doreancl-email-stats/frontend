@@ -9,6 +9,7 @@ export type State = {
   stats: Stats;
   messages_list: gmail_v1.Schema$Message[];
   messages: gmail_v1.Schema$Message[];
+  timestamps: any[]
 };
 
 export const initialState1: State = {
@@ -19,6 +20,7 @@ export const initialState1: State = {
   },
   messages_list: [],
   messages: [],
+  timestamps: null,
 };
 
 export const initialState = initialState1;
@@ -29,19 +31,16 @@ export type Action =
   | { type: "add_message"; value: gmail_v1.Schema$Message }
   | { type: "add_stats_label"; value: any }
   | { type: "add_stats_fromto"; value: any }
-  | { type: "load_stat_1"; value: any };
+  | { type: "load_stat_1"; value: any }
+  | { type: "set_timestamps"; value: any };
 
 export const AppReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "init_stored": {
-      console.log(111111, "init_stored", action.value);
-
       return action.value;
     }
 
     case "add_messages_list": {
-      console.log(22222, "add_messages_list", action.value);
-
       return {
         ...state,
         messages_list: action.value,
@@ -120,5 +119,12 @@ export const AppReducer = (state: State, action: Action): State => {
         },
       };
     }
+    case "set_timestamps":{
+      return {
+        ...state,
+        timestamps: action.value,
+      };
+    }
+
   }
 };
