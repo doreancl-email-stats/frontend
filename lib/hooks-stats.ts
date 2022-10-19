@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
 const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
-const BFF_API_URL = process.env.NEXT_PUBLIC_BFF_API_URL;
+const BFF_API_URL = `${process.env.NEXT_PUBLIC_BFF_API_URL}/api`;
 
 const fetcher = (url) =>
   fetch(url)
@@ -11,7 +11,7 @@ const fetcher = (url) =>
     });
 
 const fetcherWithParameters = (url, parameters = "") => {
-  // Example fetch to demonstrate the logic
+  // Example fetch to demonstrate the log/ic
   console.log(`${url}${parameters}`);
   return fetch(`${url}${parameters}`)
     .then((r) => r.json())
@@ -21,8 +21,8 @@ const fetcherWithParameters = (url, parameters = "") => {
 };
 
 interface TimestampBetween {
-  from: Date;
-  to: Date;
+  from: number;
+  to: number;
 }
 
 interface TimestampBetweenGrouped extends TimestampBetween {
@@ -52,28 +52,31 @@ const onGenericEffectWithParams = async ({ url, parameters }) => {
   };
 };
 
-export const onGetUnreadEmails = async ({ from, to }: TimestampBetween) => {
+export const onGetUnreadEmails = async ({
+  from = 0,
+  to = 0,
+}: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${API_URL}/stats/total_unread_emails`,
-    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+    url: `${BFF_API_URL}/stats/total_unread_emails/`,
+    parameters: `?from=${from}&to=${to}`,
   });
 };
 export const onGetPromotionsEmails = async ({ from, to }: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${API_URL}/stats/total_promotions_emails`,
-    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+    url: `${BFF_API_URL}/stats/total_promotions_emails/`,
+    parameters: `?from=${from}&to=${to}`,
   });
 };
 export const onGetReceivedEmails = async ({ from, to }: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${API_URL}/stats/total_received_emails`,
-    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+    url: `${BFF_API_URL}/stats/total_received_emails/`,
+    parameters: `?from=${from}&to=${to}`,
   });
 };
 export const onGetSentEmails = async ({ from, to }: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${API_URL}/stats/total_sent_emails`,
-    parameters: `?from=${from.getTime()}&to=${to.getTime()}`,
+    url: `${BFF_API_URL}/stats/total_sent_emails/`,
+    parameters: `?from=${from}&to=${to}`,
   });
 };
 export const onGetReceivedEmailsHistogram = async ({
@@ -81,10 +84,11 @@ export const onGetReceivedEmailsHistogram = async ({
   to,
   unit,
 }: TimestampBetweenWithUnit) => {
-  return await onGenericEffectWithParams({
-    url: `${API_URL}/stats/received_emails_histogram`,
-    parameters: `?from=${from.getTime()}&to=${to.getTime()}&unit=${unit}`,
+  const res = await onGenericEffectWithParams({
+    url: `${BFF_API_URL}/stats/received_emails_histogram/`,
+    parameters: `?from=${from}&to=${to}&unit=${unit}`,
   });
+  return res;
 };
 export const onGetSentEmailsHistogram = async ({
   from,
@@ -92,8 +96,8 @@ export const onGetSentEmailsHistogram = async ({
   unit,
 }: TimestampBetweenWithUnit) => {
   return await onGenericEffectWithParams({
-    url: `${API_URL}/stats/sent_emails_histogram`,
-    parameters: `?from=${from.getTime()}&to=${to.getTime()}&unit=${unit}`,
+    url: `${BFF_API_URL}/stats/sent_emails_histogram/`,
+    parameters: `?from=${from}&to=${to}&unit=${unit}`,
   });
 };
 
@@ -102,8 +106,13 @@ export const onGetTopInteractions = async ({
   to,
   groupBy,
 }: TimestampBetweenGrouped) => {
-  return await onGenericEffectWithParams({
-    url: `${API_URL}/stats/top_interactions`,
-    parameters: `?from=${from.getTime()}&to=${to.getTime()}&group_by=${groupBy}`,
+  const res = await onGenericEffectWithParams({
+    url: `${BFF_API_URL}/stats/top_interactions/`,
+    parameters: `?from=${from}&to=${to}&group_by=${groupBy}`,
   });
+  for (let i = 0; i < res.data.length; i++) {
+    res.data[i].xx = /<(.*)>/g.exec(res.data[i].email_address);
+  }
+  console.log("onGetTopInteractions", { res });
+  return res;
 };

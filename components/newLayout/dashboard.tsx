@@ -12,11 +12,12 @@ import {
   onGetTopInteractions,
   onGetUnreadEmails,
 } from "../../lib/hooks-stats";
+import { getSession } from "../../lib/hooks-users";
 
 const bla = {
   loading: true,
   data: {
-    count: 1,
+    count: 0,
   },
   error: null,
 };
@@ -30,28 +31,16 @@ const ble = {
 const headersTopByAddress = [
   { name: "email_address", display: "Email" },
   { name: "interactions", display: "Interactions" },
-  { name: "sent_messages", display: "Sent Smessages" },
-  { name: "received_messages", display: "Received messages" },
+  { name: "sent_messages", display: "Sent" },
+  { name: "received_messages", display: "Received" },
 ];
 const headersTopByDomain = [
   { name: "domain", display: "Domain" },
   { name: "interactions", display: "Interactions" },
 ];
 
-export default function Dashboard1() {
+export default function Dashboard() {
   const [state, dispatch] = useAppContext();
-  const [isChartLoaded, setIsChartLoaded] = useState<boolean>(false);
-  const [receivedHistogram, setReceivedHistogram] = useState(null);
-  const [sendedHistogram, setSendedHistogram] = useState(null);
-  const [totalUnreadEmails, setTotalUnreadEmails] = useState(null);
-  const [timestapCurrent, setTimestapCurrent] = useState({
-    from: new Date(),
-    to: new Date(),
-  });
-  const [timestampPrevious, setTimestampPrevious] = useState({
-    from: new Date(),
-    to: new Date(),
-  });
   const [unreadEmails, setUnreadEmails] = useState(bla);
   const [promotionsEmails, setPromotionsEmails] = useState(bla);
   const [receivedEmails, setReceivedEmails] = useState(bla);
@@ -64,56 +53,73 @@ export default function Dashboard1() {
   const [topInteractionsByDomain, setTopInteractionsByDomain] = useState(ble);
   const [receivedEmailsHistogram, setReceivedEmailsHistogram] = useState(ble);
   const [sentEmailsHistogram, setSentEmailsHistogram] = useState(ble);
+  const [session, error] = useState(null);
 
   useEffect(() => {
-    console.log("----dashboard1.tsx--INIT--");
-    timestapCurrent.from.setHours(0, 0, 0, 0);
-    timestapCurrent.from.setMonth(timestapCurrent.from.getMonth() - 1);
-    setTimestapCurrent(timestapCurrent);
-
-    timestampPrevious.to.setHours(0, 0, 0, 0);
-    timestampPrevious.to.setMonth(timestampPrevious.from.getMonth() - 2);
-    timestampPrevious.from.setHours(23, 60, 60);
-    timestampPrevious.from.setMonth(timestampPrevious.from.getMonth() - 1);
-    setTimestampPrevious(timestampPrevious);
-
+    if (!state.timestamps) {
+      return;
+    }
     (async () => {
-      setUnreadEmails(await onGetUnreadEmails(timestapCurrent));
-      setUnreadEmailsPrevious(await onGetUnreadEmails(timestampPrevious));
+      if (!state.timestamps) {
+        return;
+      }
+      if (!state.timestamps.current) {
+        return;
+      }
+      if (!state.timestamps.previous) {
+        return;
+      }
 
-      setPromotionsEmails(await onGetPromotionsEmails(timestapCurrent));
-      setPromotionsEmailsPrevious(
-        await onGetPromotionsEmails(timestampPrevious)
-      );
+      const current = state.timestamps.current;
+      const previous = state.timestamps.previous;
 
-      setReceivedEmails(await onGetReceivedEmails(timestapCurrent));
-      setReceivedEmailsPrevious(await onGetReceivedEmails(timestampPrevious));
+      console.table({ current, previous });
+      setUnreadEmails(await onGetUnreadEmails(current));
+      setUnreadEmailsPrevious(await onGetUnreadEmails(previous));
 
-      setSentEmails(await onGetSentEmails(timestapCurrent));
-      setSentEmailsPrevious(await onGetSentEmails(timestampPrevious));
+      setPromotionsEmails(await onGetPromotionsEmails(current));
+      setPromotionsEmailsPrevious(await onGetPromotionsEmails(previous));
+
+      setReceivedEmails(await onGetReceivedEmails(current));
+      setReceivedEmailsPrevious(await onGetReceivedEmails(previous));
+
+      setSentEmails(await onGetSentEmails(current));
+      setSentEmailsPrevious(await onGetSentEmails(previous));
 
       setTopInteractionsByAddress(
-        await onGetTopInteractions({ ...timestapCurrent, groupBy: "address" })
+        await onGetTopInteractions({
+          ...current,
+          groupBy: "address",
+        })
       );
       setTopInteractionsByDomain(
-        await onGetTopInteractions({ ...timestapCurrent, groupBy: "domain" })
+        await onGetTopInteractions({
+          ...current,
+          groupBy: "domain",
+        })
       );
-      const la = await onGetReceivedEmailsHistogram({
-        ...timestapCurrent,
-        unit: "days",
-      });
-      const le = await onGetSentEmailsHistogram({
-        ...timestapCurrent,
-        unit: "days",
-      });
-      setReceivedEmailsHistogram(la);
-      setSentEmailsHistogram(le);
+      setReceivedEmailsHistogram(
+        await onGetReceivedEmailsHistogram({
+          ...current,
+          unit: "days",
+        })
+      );
+      setSentEmailsHistogram(
+        await onGetSentEmailsHistogram({
+          ...current,
+          unit: "days",
+        })
+      );
+    })();
+  }, [state.timestamps]);
+
+  useEffect(() => {
+    (async () => {
+      const [session, error] = await getSession({});
+
+      console.log('Dashboard', { session, error });
     })();
   }, []);
-
-  function roundPercent(current, previous) {
-    return Math.round((current / previous - 1) * 100);
-  }
 
   return (
     <div className="flex flex-col font-sans">
@@ -132,10 +138,7 @@ export default function Dashboard1() {
             <HeroChartElement
               title="Unread Messages"
               current={unreadEmails.data.count}
-              previousPercentage={roundPercent(
-                unreadEmails.data.count,
-                unreadEmailsPrevious.data.count
-              )}
+              previous={unreadEmailsPrevious.data.count}
             ></HeroChartElement>
           )}
           {promotionsEmails.loading || promotionsEmails.error ? (
@@ -144,10 +147,7 @@ export default function Dashboard1() {
             <HeroChartElement
               title="Promotion Messages"
               current={promotionsEmails.data.count}
-              previousPercentage={roundPercent(
-                promotionsEmails.data.count,
-                promotionsEmailsPrevious.data.count
-              )}
+              previous={promotionsEmailsPrevious.data.count}
             ></HeroChartElement>
           )}
           {receivedEmails.loading || receivedEmails.error ? (
@@ -156,10 +156,7 @@ export default function Dashboard1() {
             <HeroChartElement
               title="Some Messages"
               current={receivedEmails.data.count}
-              previousPercentage={roundPercent(
-                receivedEmails.data.count,
-                receivedEmailsPrevious.data.count
-              )}
+              previous={receivedEmailsPrevious.data.count}
             ></HeroChartElement>
           )}
           {sentEmails.loading || sentEmails.error ? (
@@ -168,10 +165,6 @@ export default function Dashboard1() {
             <HeroChartElement
               title="Other Messages"
               current={sentEmails.data.count}
-              previousPercentage={roundPercent(
-                sentEmails.data.count,
-                sentEmailsPrevious.data.count
-              )}
             ></HeroChartElement>
           )}
         </div>
@@ -185,15 +178,13 @@ export default function Dashboard1() {
             <HeroChartElement
               title="Received Messages"
               current={receivedEmails.data.count}
-              previousPercentage={roundPercent(
-                receivedEmails.data.count,
-                receivedEmailsPrevious.data.count
-              )}
+              previous={receivedEmailsPrevious.data.count}
             >
               {false === receivedEmailsHistogram.loading && (
                 <EmailDashboardDos
                   data={receivedEmailsHistogram.data}
                   type="area"
+                  timestamps={state.timestamps}
                 />
               )}
             </HeroChartElement>
@@ -204,15 +195,13 @@ export default function Dashboard1() {
             <HeroChartElement
               title="Sent Messages"
               current={sentEmails.data.count}
-              previousPercentage={roundPercent(
-                sentEmails.data.count,
-                sentEmailsPrevious.data.count
-              )}
+              previous={sentEmailsPrevious.data.count}
             >
               {false === sentEmailsHistogram.loading && (
                 <EmailDashboardDos
                   data={sentEmailsHistogram.data}
                   type="area"
+                  timestamps={state.timestamps}
                 />
               )}
             </HeroChartElement>
@@ -294,7 +283,7 @@ export default function Dashboard1() {
               </div>
             </div>
             <div className="">
-              <button className="px-5 py-2.5 text-sm leading-5 rounded-md font-semibold border-2">
+              <button className="px-5 py-2.5 text-sm leading-5 rounded-md font-semibold border-2 cursor-not-allowed">
                 This Month
               </button>
             </div>
@@ -340,7 +329,7 @@ export default function Dashboard1() {
               </table>
             </div>
           </div>
-          <div className="py-5 flex justify-center font-medium text-gray-400">
+          <div className="py-5 flex justify-center font-medium text-gray-400 cursor-not-allowed">
             VIEW ALL TOP ADDRESSES
           </div>
         </div>
@@ -350,8 +339,7 @@ export default function Dashboard1() {
             <div className="flex flex-row">
               <div className="font-medium">Top Domains</div>
             </div>
-            <div className="">
-            </div>
+            <div className=""></div>
           </div>
           <div className="flex flex-col mt-8">
             <div>
@@ -388,7 +376,7 @@ export default function Dashboard1() {
               </table>
             </div>
           </div>
-          <div className="py-5 flex justify-center font-medium text-gray-400 grow">
+          <div className="py-5 flex justify-center font-medium text-gray-400 grow cursor-not-allowed">
             <div className="self-end">VIEW ALL TOP DOMAINS</div>
           </div>
         </div>

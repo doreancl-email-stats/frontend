@@ -59,6 +59,7 @@ export function AppWrapper({ children }) {
       return;
     }
     if (state && state !== initialState) {
+      delete state.timestamps;
       localStorage.setItem("state", JSON.stringify(state));
       //create and/or set a new localstorage variable called "state"
     }

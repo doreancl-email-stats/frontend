@@ -28,9 +28,10 @@ export const getSession = async ({
 }: UseUserProps) => {
   //const { data, error } = useSWR("/api/user/", fetcher);
   const data = await fetch(`${BFF_API_URL}/api/user/`);
-  console.log({ data });
+  const response = await data.json();
+  //console.log({ response });
   const error = null;
-  const user = data?.user;
+  const user = response?.user;
   const finished = Boolean(data);
   const hasUser = Boolean(user);
 
@@ -39,7 +40,7 @@ export const getSession = async ({
   //if (!redirectTo || !finished) return;
 
   // return error ? null : user;
-  return [data || null, error];
+  return [user || null, error];
 };
 
 export const useGetSessionHook = ({
