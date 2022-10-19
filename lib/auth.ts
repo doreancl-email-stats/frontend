@@ -1,9 +1,9 @@
-import Iron from '@hapi/iron';
-import cookie from 'cookie';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import Iron from "@hapi/iron";
+import cookie from "cookie";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getAppCookies, verifyToken } from '../middleware/utils';
-import { getTokenCookie, MAX_AGE, setTokenCookie } from './auth-cookies';
+import { getAppCookies, verifyToken } from "../middleware/utils";
+import { getTokenCookie, MAX_AGE, setTokenCookie } from "./auth-cookies";
 
 const { TOKEN_SECRET } = process.env;
 
@@ -44,7 +44,6 @@ export async function getLoginSession(
 
   const cookies = cookie.parse(req.headers.cookie);
   // const headers = getAppCookies(req.headers);
-  console.log(42, headers, cookies);
   return null;
   if (!jwt) {
     return res.status(401).json({ statusText: ':p' });

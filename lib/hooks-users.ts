@@ -29,7 +29,6 @@ export const getSession = async ({
   //const { data, error } = useSWR("/api/user/", fetcher);
   const data = await fetch(`${BFF_API_URL}/api/user/`);
   const response = await data.json();
-  //console.log({ response });
   const error = null;
   const user = response?.user;
   const finished = Boolean(data);

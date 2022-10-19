@@ -116,8 +116,6 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       const [session, error] = await getSession({});
-
-      console.log('Dashboard', { session, error });
     })();
   }, []);
 

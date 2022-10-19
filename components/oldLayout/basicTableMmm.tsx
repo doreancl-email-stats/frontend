@@ -59,7 +59,6 @@ const BasicTable = () => {
 
   useEffect(() => {
     if (messages) {
-      console.log("messages", messages);
       setData(messages.data);
     }
   }, [messages]);

@@ -32,10 +32,8 @@ function encodeData(data) {
 
 const onGenericEffectWithParams = async ({ url, parameters }) => {
   //const { data, error } = fetch([url, parameters], fetcherWithParameters);
-  console.log('`${url}${parameters}`', `${url}${parameters}`);
   const res = await fetch(`${url}${parameters}`);
   const data: any = await res.json();
-  console.log({ data });
   return data;
 };
 const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
@@ -43,17 +41,13 @@ const BFF_API_URL = `${process.env.NEXT_PUBLIC_BFF_API_URL}/api`;
 
 export default async function handler(req, res) {
   const { stat, ...params } = req.query;
-  console.log(req.query, { stat }, { params });
 
   const url = `${stat}?${encodeData(params)}`;
-  console.log({ url });
 
   const lelo = await onGenericEffectWithParams({
     url: `${API_URL}/stats/${stat}`,
     parameters: `?${encodeData(params)}`,
   });
-
-  console.log(await { lelo });
 
   res.status(200).json(lelo);
 }

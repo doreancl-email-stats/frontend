@@ -11,9 +11,7 @@ const BasicTableRow = (props) => {
   const [state, dispatch] = useAppContext();
 
   useEffect(() => {
-    console.log("headers", headers);
     if (null != headers) {
-      console.log("dispatch", { type: "add_message", value: headers.id });
       dispatch({ type: "add_message", value: headers });
       //dispatch({ type: "add_stats_label", value: headers });
       //dispatch({ type: "add_stats_fromto", value: headers });
@@ -23,7 +21,6 @@ const BasicTableRow = (props) => {
       data.sort(
         (a, b) => item_order.indexOf(a.name) - item_order.indexOf(b.name)
       );
-      //console.log(data);
       setData(data);
     }
   }, [headers]);
@@ -36,7 +33,6 @@ const BasicTableRow = (props) => {
       data.sort(
         (a, b) => item_order.indexOf(a.name) - item_order.indexOf(b.name)
       );
-      //console.log(data);
       setData(data);
     }
   }, [state]);
