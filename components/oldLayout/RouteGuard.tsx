@@ -1,6 +1,6 @@
 // next component to add security
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 type Props = {
   children: JSX.Element;
@@ -16,7 +16,6 @@ export const RouteGuard = ({ children }: Props) => {
     const isPublic = publicUrls.includes(path);
 
     if (!isPublic) {
-      console.log('idk');
       setIsAuthenticated(false);
       router
         .push({

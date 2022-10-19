@@ -31,7 +31,6 @@ export const getSimpleHeaders = async (id, token: Token) => {
     format,
     metadataHeaders: ["Date", "Subject", "From", "To", "Delivered-To"],
   });
-  console.log(353535, res2.data);
   return res2.data;
 };
 

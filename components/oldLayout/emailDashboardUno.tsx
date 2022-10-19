@@ -38,7 +38,7 @@ const EmailDashboardUno = (props) => {
     console.log("loading chart1", dataset);
 
     const data = {
-      labels: labels,
+      messages: labels,
       datasets: [
         {
           label: "My First Dataset",
@@ -73,7 +73,6 @@ const EmailDashboardUno = (props) => {
       const dates = {};
 
       const entries = Object.entries(headers);
-      console.log(entries);
       entries.map((k) => {
         const [id, header] = k;
         const internalDate = header.internalDate / 1000;
@@ -85,18 +84,12 @@ const EmailDashboardUno = (props) => {
         //create date with format
         //const dateFormatted = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`;
         const dateFormatted = `${date.getDate()} ${MONTHS[date.getMonth()]}`;
-        console.log(date);
-        console.log(
-          `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`,
-          "---",
-          dateFormatted
-        );
+
         if (undefined === dates[dateFormatted]) {
           dates[dateFormatted] = 0;
         }
         dates[dateFormatted]++;
       });
-      console.log({ dates });
 
       return dates;
     } catch (e) {

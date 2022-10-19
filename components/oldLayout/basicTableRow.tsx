@@ -1,34 +1,41 @@
 import React, { useEffect } from "react";
 import { useAppContext } from "../../context/AppWrapper";
+import { useGetMessage } from "../../lib/hooks-google";
 
 const BasicTableRow = (props) => {
   const { row } = props;
   const [data, setData] = React.useState(() => []);
-  //const [headers, error1] = useGetHeaders(row.original.id);
-  const [headers, error1] = React.useState(() => []);
+  const [headers, error1] = useGetMessage(row.original.id);
+  //const [headers, error1] = React.useState(() => []);
 
   const [state, dispatch] = useAppContext();
 
   useEffect(() => {
     if (null != headers) {
-      dispatch({ type: "add_headers", value: headers });
-      dispatch({ type: "add_stats_label", value: headers });
-      dispatch({ type: "add_stats_fromto", value: headers });
-    }
-  }, [headers]);
+      dispatch({ type: "add_message", value: headers });
+      //dispatch({ type: "add_stats_label", value: headers });
+      //dispatch({ type: "add_stats_fromto", value: headers });
 
-  useEffect(() => {
-    if (!state || {} == state.headers) return;
-    if (undefined != state?.headers[row.original.id]) {
-      const data = state.headers[row.original.id].payload.headers;
+      const data = headers.payload.headers;
       const item_order = ["Delivered-To", "Date", "From", "Subject", "To"];
       data.sort(
         (a, b) => item_order.indexOf(a.name) - item_order.indexOf(b.name)
       );
-      //console.log(data);
       setData(data);
     }
-  }, [state.headers]);
+  }, [headers]);
+
+  useEffect(() => {
+    if (!state || undefined == state.messages) return;
+    if (undefined != state?.messages[row.original.id]) {
+      const data = state.messages[row.original.id].payload.headers;
+      const item_order = ["Delivered-To", "Date", "From", "Subject", "To"];
+      data.sort(
+        (a, b) => item_order.indexOf(a.name) - item_order.indexOf(b.name)
+      );
+      setData(data);
+    }
+  }, [state]);
 
   return (
     <>

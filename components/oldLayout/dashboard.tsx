@@ -1,5 +1,5 @@
-import {SimpleCard} from "./simple-card";
-import {LinksTable} from "./links-table";
+import { SimpleCard } from "./simple-card";
+import { LinksTable } from "./links-table";
 
 import {
   CategoryScale,
@@ -10,9 +10,9 @@ import {
   PointElement,
   Title,
   Tooltip,
-} from 'chart.js';
-import {Line} from 'react-chartjs-2';
-import {LinkType, StatType} from "../../types/types";
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import { LinkType, StatType } from "../../types/types";
 import Link from "next/link";
 
 ChartJS.register(
@@ -54,14 +54,14 @@ export function Dashboard(props: { links: LinkType[], stats: StatType[] }) {
   const timestamps = dates.map((date) => {
     return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
   });
-  const labels = dates.map((date) => {
+  const messages = dates.map((date) => {
     return (date.getMonth() + 1) + '-' + date.getDate();
   })
 
   let dataset: any = {};
 
   let totalClicks = 0;
-  const dataTemplate = labels.map(() => null);
+  const dataTemplate = messages.map(() => null);
 
   for (const statsExampleKey in props.stats) {
     const statExample = props.stats[statsExampleKey];
@@ -86,7 +86,7 @@ export function Dashboard(props: { links: LinkType[], stats: StatType[] }) {
   }
 
   const data: any = {
-    labels: labels,
+    messages: messages,
     datasets: Object.values(dataset),
   };
 

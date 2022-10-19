@@ -11,6 +11,7 @@ export default function user(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { user, message } = getSessionFromCookie(req);
 
+    console.log("--------API USER------");
     if (user) {
       res.status(200).json({ user, message });
     } else {

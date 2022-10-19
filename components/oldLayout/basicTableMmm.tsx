@@ -5,7 +5,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useEffect } from "react";
-import { useGetLabels } from "../../lib/hooks-google";
+import { useGetMessages } from "../../lib/hooks-google";
 
 type Person = {
   id: string;
@@ -55,14 +55,13 @@ const columns = [
 
 const BasicTable = () => {
   const [data, setData] = React.useState(() => []);
-  const [labels, error1] = useGetLabels();
+  const [messages, error1] = useGetMessages();
 
   useEffect(() => {
-    if (labels) {
-      console.log("labels", labels);
-      setData(labels.data);
+    if (messages) {
+      setData(messages.data);
     }
-  }, [labels]);
+  }, [messages]);
 
   const table = useReactTable({
     data,

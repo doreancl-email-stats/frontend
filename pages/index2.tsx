@@ -1,11 +1,11 @@
 import type { GetServerSideProps } from "next";
 
 import { Content } from "../components/oldLayout/content";
-import useGetSession from "../lib/hooks-users";
+import { useGetSessionHook } from "../lib/hooks-users";
 import EmailDashboard from "../components/oldLayout/emailDashboard";
 
-const Index = () => {
-  const [session, error] = useGetSession({});
+const Index2 = () => {
+  const [session, error] = useGetSessionHook({});
 
   return (
     <>
@@ -33,7 +33,7 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Index2;
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {
