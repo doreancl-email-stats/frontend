@@ -1,11 +1,16 @@
 import BasicTable from "../components/oldLayout/basicTable";
 import { Content } from "../components/oldLayout/content";
 import { useGetSessionHook } from "../lib/hooks-users";
+import { useEffect } from "react";
 
 const Protected = () => {
   const [session, error] = useGetSessionHook({});
 
-  if (session) {
+  useEffect(() => {
+    console.log({ session });
+  }, [session]);
+
+  if (session.user) {
     return (
       <>
         <Content>

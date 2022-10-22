@@ -1,12 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
-import { AppReducer, initialState } from "./AppReducer";
+import { APP_STATE, AppReducer, initialState } from "./AppReducer";
 
 const themes = {
   light: {
@@ -25,20 +19,9 @@ const { NEXT_PUBLIC_WITH_LOCAL_STORAGE } = process.env;
 
 export function AppWrapper({ children }) {
   const [state, dispatch] = useReducer(AppReducer, initialState);
-  const [isMounted, setIsMounted] = useState(false);
-  /*
-    const contextValue = useMemo(() => {
-      return [state, dispatch];
-    }, [state, dispatch]);
-  */
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
-    if (false === isMounted) {
-      return;
-    }
+    console.log("localStorage.getItem FIRST");
     if ("false" === NEXT_PUBLIC_WITH_LOCAL_STORAGE) {
       return;
     }
@@ -52,16 +35,32 @@ export function AppWrapper({ children }) {
         });
       }
     } catch (e) {}
-  }, [isMounted]);
+
+    dispatch({
+      type: "new_app_state",
+      value: APP_STATE.READY
+      //if yes, update the current state with the stored one
+    });
+  }, []);
 
   useEffect(() => {
-    if ("false" === NEXT_PUBLIC_WITH_LOCAL_STORAGE) {
-      return;
-    }
-    if (state && state !== initialState) {
-      delete state.timestamps;
-      localStorage.setItem("state", JSON.stringify(state));
+    console.log("localStorage.setItem");
+    const actualState = JSON.parse(localStorage.getItem("state"));
+
+    const isLocalStorageEnabled = "false" === NEXT_PUBLIC_WITH_LOCAL_STORAGE;
+    const hasStateCHanged = actualState != state;
+    const isStateAndIsDiferentFromDefault = state && state !== initialState;
+
+    if (
+      isLocalStorageEnabled &&
+      hasStateCHanged &&
+      isStateAndIsDiferentFromDefault
+    ) {
+      const newState = { ...state };
+      delete newState.timestamps;
+
       //create and/or set a new localstorage variable called "state"
+      localStorage.setItem("state", JSON.stringify(newState));
     }
   }, [state]);
 
