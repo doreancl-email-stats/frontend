@@ -23,7 +23,7 @@ export const getSessionFromCookie = (
       }
     }
 
-    return { user: null, message: "ending" };
+    return { user: null, message: "expired session" };
   } catch (error) {
     return { user: null, message: error.message };
   }

@@ -18,7 +18,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           revalidateIfStale: false,
           errorRetryCount: 1,
           refreshInterval: 999999,
-          fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
+          fetcher: (resource, init) =>
+            fetch(resource, init).then((res) => res.json()),
         }}
       >
         <Component {...pageProps} />

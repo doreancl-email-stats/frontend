@@ -22,5 +22,5 @@ module.exports = withBundleAnalyzer({
       'images.unsplash.com',
     ],
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
 });

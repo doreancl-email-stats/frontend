@@ -16,7 +16,7 @@ export default function Layout() {
                 className="px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white
               bg-sky-500 hover:bg-sky-700
               bg-gray-500 hover:bg-gray-500
-              cursor-not-allowed	
+              cursor-not-allowed
               "
               >
                 Download Report

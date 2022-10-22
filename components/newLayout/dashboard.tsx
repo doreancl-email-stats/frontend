@@ -12,7 +12,6 @@ import {
   onGetTopInteractions,
   onGetUnreadEmails,
 } from "../../lib/hooks-stats";
-import { getSession } from "../../lib/hooks-users";
 
 const bla = {
   loading: true,
@@ -53,7 +52,6 @@ export default function Dashboard() {
   const [topInteractionsByDomain, setTopInteractionsByDomain] = useState(ble);
   const [receivedEmailsHistogram, setReceivedEmailsHistogram] = useState(ble);
   const [sentEmailsHistogram, setSentEmailsHistogram] = useState(ble);
-  const [session, error] = useState(null);
 
   useEffect(() => {
     if (!state.timestamps) {
@@ -112,12 +110,6 @@ export default function Dashboard() {
       );
     })();
   }, [state.timestamps]);
-
-  useEffect(() => {
-    (async () => {
-      const [session, error] = await getSession({});
-    })();
-  }, []);
 
   return (
     <div className="flex flex-col font-sans">

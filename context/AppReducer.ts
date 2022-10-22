@@ -5,14 +5,20 @@ export type Stats = {
   from: [];
   to: [];
 };
+export enum APP_STATE {
+  LOADING = "LOADING",
+  READY = "READY",
+};
 export type State = {
+  app_state: APP_STATE;
   stats: Stats;
   messages_list: gmail_v1.Schema$Message[];
   messages: gmail_v1.Schema$Message[];
-  timestamps: any[]
+  timestamps: any[];
 };
 
 export const initialState1: State = {
+  app_state: APP_STATE.LOADING,
   stats: {
     labels: [],
     from: [],
@@ -32,10 +38,18 @@ export type Action =
   | { type: "add_stats_label"; value: any }
   | { type: "add_stats_fromto"; value: any }
   | { type: "load_stat_1"; value: any }
-  | { type: "set_timestamps"; value: any };
+  | { type: "set_timestamps"; value: any }
+  | { type: "new_app_state"; value: APP_STATE };
 
 export const AppReducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case "new_app_state": {
+      console.log("new_app_state", action.value);
+      return {
+        ...state,
+        app_state: action.value,
+      };    }
+
     case "init_stored": {
       return action.value;
     }
@@ -119,12 +133,11 @@ export const AppReducer = (state: State, action: Action): State => {
         },
       };
     }
-    case "set_timestamps":{
+    case "set_timestamps": {
       return {
         ...state,
         timestamps: action.value,
       };
     }
-
   }
 };
