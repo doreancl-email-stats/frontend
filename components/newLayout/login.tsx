@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
 
@@ -10,7 +11,7 @@ export default function Login() {
         <div className="container px-6 py-12 h-full">
           <div className="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
             <div className="md:w-8/12 lg:w-6/12 mb-12 md:mb-0">
-              <img
+              <Image
                 src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
                 className="w-full"
                 alt="Phone image"
@@ -23,7 +24,7 @@ export default function Login() {
                   role="button"
                   className="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10"
                 >
-                  <img
+                  <Image
                     src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg"
                     alt="google"
                   />
