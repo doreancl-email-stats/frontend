@@ -1,12 +1,11 @@
-import { Content } from "../components/oldLayout/content";
-import LoginForm from "../components/oldLayout/loginForm";
+import LoginForm from "../components/newLayout/loginForm";
 
 const Login = () => {
   return (
     <>
-      <Content>
+      <>
         <LoginForm />
-      </Content>
+      </>
     </>
   );
 };

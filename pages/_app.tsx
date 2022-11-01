@@ -3,13 +3,6 @@ import type { AppProps } from "next/app";
 import { AppWrapper } from "../context/AppWrapper";
 import { SWRConfig } from "swr";
 
-if (
-  process.env.NODE_ENV === "development" &&
-  process.env.NEXT_PUBLIC_API_MOCKING === "enabled"
-) {
-  const { worker } = require("../mocks");
-}
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AppWrapper>

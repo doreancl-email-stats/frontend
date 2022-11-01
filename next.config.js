@@ -15,11 +15,13 @@ module.exports = withBundleAnalyzer({
   // So, the source code is "basePath-ready".
   // You can remove `basePath` if you don't need it.
   images: {
+    dangerouslyAllowSVG: true,
     domains: [
       'secure.gravatar.com',
       'vercel.wpengine.com',
       'img.icons8.com',
       'images.unsplash.com',
+      'tailwindui.com',
     ],
   },
   reactStrictMode: false,

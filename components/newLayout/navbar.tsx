@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 const user = {
   name: "Tom Cook",
@@ -34,10 +35,12 @@ export default function Navbar() {
             <div className="flex h-16  justify-between">
               <div className="flex cursor-not-allowed">
                 <div className="border-r flex items-center pr-6">
-                  <img
+                  <Image
                     className="h-8 w-8"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                     alt="Your Company"
+                    width={35}
+                    height={35}
                   />
                 </div>
               </div>
@@ -78,10 +81,12 @@ export default function Navbar() {
                       <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800
                       cursor-not-allowed">
                         <span className="sr-only">Open user menu</span>
-                        <img
+                        <Image
                           className="h-8 w-8 rounded-full"
                           src={user.imageUrl}
                           alt=""
+                          width={35}
+                          height={35}
                         />
                       </Menu.Button>
                     </div>
@@ -151,7 +156,7 @@ export default function Navbar() {
             <div className="border-t border-gray-700 pt-4 pb-3">
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
-                  <img
+                  <Image
                     className="h-10 w-10 rounded-full"
                     src={user.imageUrl}
                     alt=""

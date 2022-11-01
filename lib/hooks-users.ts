@@ -3,10 +3,6 @@ import { useEffect } from "react";
 import useSWR from "swr";
 import { Session } from "../types/userjwt";
 
-if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
-  require("../mocks");
-}
-
 const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
 const BFF_API_URL = process.env.NEXT_PUBLIC_BFF_API_URL;
 
@@ -65,7 +61,7 @@ export const useGetSessionHook = ({
       Router.push(redirectTo);
       return;
     }
-  }, [redirectTo, redirectIfFound, finished, hasUser]);
+  }, [redirectTo, redirectIfFound, finished, hasUser, user]);
 
   // return error ? null : user;
   return [data || null, error];

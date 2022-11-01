@@ -113,6 +113,5 @@ export const onGetTopInteractions = async ({
   for (let i = 0; i < res.data.length; i++) {
     res.data[i].xx = /<(.*)>/g.exec(res.data[i].email_address);
   }
-  console.log("onGetTopInteractions", { res });
   return res;
 };

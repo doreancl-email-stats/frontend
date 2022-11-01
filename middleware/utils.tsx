@@ -1,9 +1,9 @@
-import cookie from 'cookie';
-import type { IncomingHttpHeaders } from 'http';
-import type { JwtPayload } from 'jsonwebtoken';
-import { verify } from 'jsonwebtoken';
+import cookie from "cookie";
+import type { IncomingHttpHeaders } from "http";
+import type { JwtPayload } from "jsonwebtoken";
+import { verify } from "jsonwebtoken";
 
-const SECRET_KEY = process.env.JWT_SECRET || '';
+const SECRET_KEY = process.env.JWT_SECRET || "";
 
 export const verifyToken = (jwtToken: string): null | JwtPayload | string => {
   try {
@@ -14,7 +14,7 @@ export const verifyToken = (jwtToken: string): null | JwtPayload | string => {
   }
 };
 
-export function getAppCookies(headers: IncomingHttpHeaders): {} | null {
+export function getAppCookies(headers: IncomingHttpHeaders): any {
   if (headers.cookie) {
     return cookie.parse(headers.cookie);
   }

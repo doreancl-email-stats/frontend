@@ -14,7 +14,7 @@ const Index = ({ session, timestampCurrent, timestampPrevious }) => {
       type: "set_timestamps",
       value: { current: timestampCurrent, previous: timestampPrevious },
     });
-  }, [timestampCurrent, timestampPrevious]);
+  }, [timestampCurrent, timestampPrevious, dispatch]);
 
   useEffect(() => {
     console.log("REDIRECT ????");
