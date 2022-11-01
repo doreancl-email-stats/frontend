@@ -8,7 +8,7 @@ const Protected = () => {
     console.log({ session });
   }, [session]);
 
-  if (session.user) {
+  if (session && session.user) {
     return (
       <>
         <>
