@@ -1,9 +1,14 @@
 import { useGetSessionHook } from "../lib/hooks-users";
+import { useEffect } from "react";
 
 const Protected = () => {
   const [session, error] = useGetSessionHook({});
 
-  if (session) {
+  useEffect(() => {
+    console.log({ session });
+  }, [session]);
+
+  if (session.user) {
     return (
       <>
         <>

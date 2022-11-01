@@ -9,7 +9,7 @@ export default function user(req: NextApiRequest, res: NextApiResponse) {
     if (user) {
       res.status(200).json({ user, message });
     } else {
-      res.status(401).json({ message });
+      res.status(401).json({ user, message });
     }
   } catch (error) {
     console.error(error);
