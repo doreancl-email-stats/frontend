@@ -5,7 +5,12 @@ export type Stats = {
   from: [];
   to: [];
 };
+export enum APP_STATE {
+  LOADING = "LOADING",
+  READY = "READY",
+};
 export type State = {
+  app_state: APP_STATE;
   stats: Stats;
   messages_list: gmail_v1.Schema$Message[];
   messages: gmail_v1.Schema$Message[];
@@ -13,6 +18,7 @@ export type State = {
 };
 
 export const initialState1: State = {
+  app_state: APP_STATE.LOADING,
   stats: {
     labels: [],
     from: [],
@@ -29,13 +35,18 @@ export type Action =
   | { type: "init_stored"; value: State }
   | { type: "add_messages_list"; value: gmail_v1.Schema$Message[] }
   | { type: "add_message"; value: gmail_v1.Schema$Message }
-  | { type: "add_stats_label"; value: any }
-  | { type: "add_stats_fromto"; value: any }
-  | { type: "load_stat_1"; value: any }
-  | { type: "set_timestamps"; value: any };
+  | { type: "set_timestamps"; value: any }
+  | { type: "new_app_state"; value: APP_STATE };
 
 export const AppReducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case "new_app_state": {
+      console.log("new_app_state", action.value);
+      return {
+        ...state,
+        app_state: action.value,
+      };    }
+
     case "init_stored": {
       return action.value;
     }
@@ -64,61 +75,6 @@ export const AppReducer = (state: State, action: Action): State => {
       };
     }
 
-    case "add_stats_label": {
-      const labels = {
-        ...state.stats.labels,
-      };
-
-      const { id, labelIds } = action.value;
-
-      if (labelIds) {
-        for (const label of labelIds) {
-          if (undefined === labels[label]) {
-            labels[label] = [];
-          }
-
-          if (labels[label].indexOf(id) === -1) {
-            labels[label].push(id);
-          }
-        }
-      }
-
-      return {
-        ...state,
-        stats: {
-          ...state.stats,
-          labels: labels,
-        },
-      };
-    }
-    case "add_stats_fromto": {
-      const { from, to } = state.stats;
-
-      const { id, payload } = action.value;
-      if (payload && payload.headers) {
-        for (const header of payload.headers) {
-          if (header.name === "From") {
-            if (from.indexOf(header.value) === -1) {
-              from.push(header.value);
-            }
-          }
-          if (header.name === "To") {
-            if (to.indexOf(header.value) === -1) {
-              to.push(header.value);
-            }
-          }
-        }
-      }
-
-      return {
-        ...state,
-        stats: {
-          ...state.stats,
-          to: [...to],
-          from: [...from],
-        },
-      };
-    }
     case "set_timestamps":{
       return {
         ...state,

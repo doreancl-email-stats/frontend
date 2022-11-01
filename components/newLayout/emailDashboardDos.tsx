@@ -1,21 +1,14 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import { ApexOptions } from "apexcharts";
+import { Props } from "react-apexcharts";
 
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const ColumnBasic = () => {
-  type Chart = {
-    options: ApexOptions;
-    series: ApexOptions["series"];
-  };
-  var chart: Chart = {
+const EmailDashboardDos = ({ data, type = "bar", timestamps }) => {
+  const chart: Props = {
     options: {
-      title: {
-
-      },
+      title: {},
       chart: {
-        type: "bar",
         toolbar: { show: false },
       },
       tooltip: {
@@ -30,28 +23,29 @@ const ColumnBasic = () => {
         intersect: false,
       },
       xaxis: {
-        categories: [1,2,3,4,5,6,7,8,9],
+        //categories: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        //messages: { show: false, },
+        //crosshairs: { show: false,},
+        //labels: { format: 'dd/MM', }
         offsetY: -12,
-        messages: {
-          //show: false,
-        },
         axisBorder: {
           show: false,
-        },
-        crosshairs: {
-          //show: false,
         },
         axisTicks: {
           show: false,
         },
+        min: timestamps?.current.from,
+        max: timestamps?.current.to,
+        //tickAmount: 10,
+        type: "datetime",
       },
       yaxis: {
-        messages: {
-          show: false,
-        },
+        // messages: {show: false},
         axisBorder: {
           // show: false,
         },
+        min: 0,
+        //tickAmount: 1,
       },
       grid: {
         show: false,
@@ -77,20 +71,20 @@ const ColumnBasic = () => {
     },
     series: [
       {
-        name: "Net Profit",
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+        data,
       },
     ],
+    type: type as Props["type"],
   };
 
   return (
     <>
-      {chart && (
+      {data && (
         <>
           <ApexCharts
             options={chart.options}
             series={chart.series}
-            type={chart.options.chart.type}
+            type={chart.type}
           />
         </>
       )}
@@ -98,4 +92,4 @@ const ColumnBasic = () => {
   );
 };
 
-export default ColumnBasic;
+export default EmailDashboardDos;

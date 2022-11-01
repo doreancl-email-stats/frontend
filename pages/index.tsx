@@ -1,9 +1,12 @@
 import type { GetServerSideProps } from "next";
 import Layout from "../components/newLayout/layout";
 import { useAppContext } from "../context/AppWrapper";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { getSession } from "../lib/hooks-users";
+import { APP_STATE } from "../context/AppReducer";
 
-const Index = ({ timestampCurrent, timestampPrevious }) => {
+const Index = ({ session, timestampCurrent, timestampPrevious }) => {
+  console.log("Index");
   const [state, dispatch] = useAppContext();
 
   useEffect(() => {
@@ -11,14 +14,26 @@ const Index = ({ timestampCurrent, timestampPrevious }) => {
       type: "set_timestamps",
       value: { current: timestampCurrent, previous: timestampPrevious },
     });
-  }, [timestampCurrent, timestampPrevious]);
+  }, [timestampCurrent, timestampPrevious, dispatch]);
 
-  return <Layout />;
+  useEffect(() => {
+    console.log("REDIRECT ????");
+    if (state.app_state == APP_STATE.READY && !session?.user) {
+      console.log("REDIRECT");
+      //return window.location.assign("https://sites.google.com/view/emailstats/");
+    }
+  }, [state, session]);
+
+  return <>{state.app_state == APP_STATE.READY && <Layout />}</>;
 };
 
 export default Index;
 
 export const getServerSideProps: GetServerSideProps = async () => {
+  const [session, error] = await getSession({});
+  console.log("getServerSideProps");
+  console.log({ session, error });
+
   const today = new Date();
 
   const timestampCurrent = {
@@ -44,6 +59,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   return {
     props: {
+      session,
       timestampCurrent,
       timestampPrevious,
     },

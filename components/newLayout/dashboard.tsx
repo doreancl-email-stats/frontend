@@ -2,7 +2,6 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import HeroChartElement from "./hero-chart-element";
 import { useAppContext } from "../../context/AppWrapper";
-import EmailDashboardDos from "../oldLayout/emailDashboardDos";
 import {
   onGetPromotionsEmails,
   onGetReceivedEmails,
@@ -13,6 +12,7 @@ import {
   onGetUnreadEmails,
 } from "../../lib/hooks-stats";
 import { getSession } from "../../lib/hooks-users";
+import EmailDashboardDos from "./emailDashboardDos";
 
 const bla = {
   loading: true,
@@ -73,7 +73,6 @@ export default function Dashboard() {
       const current = state.timestamps.current;
       const previous = state.timestamps.previous;
 
-      console.table({ current, previous });
       setUnreadEmails(await onGetUnreadEmails(current));
       setUnreadEmailsPrevious(await onGetUnreadEmails(previous));
 
@@ -205,68 +204,6 @@ export default function Dashboard() {
             </HeroChartElement>
           )}
         </div>
-
-        {/*
-        <div className="px-3 py-4 flex flex-row justify-between border">
-          <div className="flex flex-row gap-2 items-center">
-            <div>
-              <input
-                id="remember"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
-              />
-              all stores
-            </div>
-            <div>
-              <input
-                id="remember"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
-              />
-              apple music
-            </div>
-            <div>
-              <input
-                id="remember"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
-              />
-              spotify
-            </div>
-            <div>
-              <input
-                id="remember"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
-              />
-              dezzwer
-            </div>
-            <div>
-              <input
-                id="remember"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 bg-gray-50 rounded border border-gray-300 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
-                required
-              />
-              otro
-            </div>
-          </div>
-          <div>
-            <button className="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white">
-              Download Report
-            </button>
-          </div>
-        </div>
-        */}
       </div>
 
       <div className="bg-white shadow-lg mt-3 flex flex-row">
@@ -277,7 +214,7 @@ export default function Dashboard() {
                 Top addresses
               </div>
               <div className="hidden font-medium text-gray-400 ml-3">
-                Top sended emails
+                Top sent emails
               </div>
             </div>
             <div className="">
