@@ -5,16 +5,17 @@ export type Stats = {
   from: [];
   to: [];
 };
+
 export enum APP_STATE {
   LOADING = "LOADING",
   READY = "READY",
-};
+}
 export type State = {
   app_state: APP_STATE;
   stats: Stats;
   messages_list: gmail_v1.Schema$Message[];
   messages: gmail_v1.Schema$Message[];
-  timestamps: any[]
+  timestamps: any[];
 };
 
 export const initialState1: State = {
@@ -45,7 +46,8 @@ export const AppReducer = (state: State, action: Action): State => {
       return {
         ...state,
         app_state: action.value,
-      };    }
+      };
+    }
 
     case "init_stored": {
       return action.value;
@@ -75,12 +77,11 @@ export const AppReducer = (state: State, action: Action): State => {
       };
     }
 
-    case "set_timestamps":{
+    case "set_timestamps": {
       return {
         ...state,
         timestamps: action.value,
       };
     }
-
   }
 };

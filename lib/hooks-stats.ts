@@ -1,7 +1,5 @@
 import useSWR from "swr";
-
-const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
-const BFF_API_URL = `${process.env.NEXT_PUBLIC_BFF_API_URL}/api`;
+import { BFF_API_URL } from "../config";
 
 const fetcher = (url) =>
   fetch(url)
@@ -84,11 +82,10 @@ export const onGetReceivedEmailsHistogram = async ({
   to,
   unit,
 }: TimestampBetweenWithUnit) => {
-  const res = await onGenericEffectWithParams({
+  return await onGenericEffectWithParams({
     url: `${BFF_API_URL}/stats/received_emails_histogram/`,
     parameters: `?from=${from}&to=${to}&unit=${unit}`,
   });
-  return res;
 };
 export const onGetSentEmailsHistogram = async ({
   from,

@@ -1,8 +1,6 @@
 import type { Credentials } from "google-auth-library/build/src/auth/credentials";
 import { google } from "googleapis";
-
-const clientId = process.env.GOOGLE_ID;
-const clientSecret = process.env.GOOGLE_SECRET;
+import { API_URL, clientId, clientSecret } from "../../../config";
 
 type Token = { accessToken: string; refreshToken: string };
 const format = "metadata";
@@ -33,11 +31,8 @@ function encodeData(data) {
 const onGenericEffectWithParams = async ({ url, parameters }) => {
   //const { data, error } = fetch([url, parameters], fetcherWithParameters);
   const res = await fetch(`${url}${parameters}`);
-  const data: any = await res.json();
-  return data;
+  return await res.json();
 };
-const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
-const BFF_API_URL = `${process.env.NEXT_PUBLIC_BFF_API_URL}/api`;
 
 export default async function handler(req, res) {
   const { stat, ...params } = req.query;

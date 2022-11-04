@@ -1,15 +1,18 @@
 import type { GetServerSideProps } from "next";
 import Layout from "../components/newLayout/layout";
 import { useAppContext } from "../context/AppWrapper";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getSession } from "../lib/hooks-users";
 import { APP_STATE } from "../context/AppReducer";
 
-const Index = ({ session, timestampCurrent, timestampPrevious }) => {
+const Index = ({ timestampCurrent, timestampPrevious }) => {
   console.log("Index");
   const [state, dispatch] = useAppContext();
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
+    console.log("set_timestamps ????", timestampCurrent, timestampPrevious);
+
     dispatch({
       type: "set_timestamps",
       value: { current: timestampCurrent, previous: timestampPrevious },
@@ -17,9 +20,23 @@ const Index = ({ session, timestampCurrent, timestampPrevious }) => {
   }, [timestampCurrent, timestampPrevious, dispatch]);
 
   useEffect(() => {
-    console.log("REDIRECT ????");
-    if (state.app_state == APP_STATE.READY && !session?.user) {
-      console.log("REDIRECT");
+    if (state.app_state == APP_STATE.READY) {
+      //return window.location.assign("https://sites.google.com/view/emailstats/");
+      (async () => {
+        const [session, error] = await getSession({});
+        setSession(session);
+      })();
+    }
+  }, [state]);
+
+  useEffect(() => {
+    console.log("REDIRECT ????", state);
+    if (
+      state.app_state == APP_STATE.READY &&
+      null != session &&
+      !session?.profile
+    ) {
+      console.log("REDIRECT", session);
       //return window.location.assign("https://sites.google.com/view/emailstats/");
     }
   }, [state, session]);
@@ -30,10 +47,6 @@ const Index = ({ session, timestampCurrent, timestampPrevious }) => {
 export default Index;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const [session, error] = await getSession({});
-  console.log("getServerSideProps");
-  console.log({ session, error });
-
   const today = new Date();
 
   const timestampCurrent = {
@@ -59,7 +72,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   return {
     props: {
-      session,
       timestampCurrent,
       timestampPrevious,
     },

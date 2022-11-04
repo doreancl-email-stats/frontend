@@ -2,9 +2,7 @@ import Router from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { Session } from "../types/userjwt";
-
-const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
-const BFF_API_URL = process.env.NEXT_PUBLIC_BFF_API_URL;
+import { BFF_API_URL } from "../config";
 
 type UseUserProps = {
   redirectTo?: string;
@@ -22,14 +20,16 @@ export const getSession = async ({
   redirectTo,
   redirectIfFound,
 }: UseUserProps) => {
+  console.log("getSession");
   //const { data, error } = useSWR("/api/user/", fetcher);
   const data = await fetch(`${BFF_API_URL}/api/user/`);
+  console.log(BFF_API_URL, `${BFF_API_URL}/api/user/`);
+  console.log('/api/user', data.status, data.statusText);
   const response = await data.json();
   const error = null;
   const user = response?.user;
-  const finished = Boolean(data);
-  const hasUser = Boolean(user);
 
+  console.log(user)
   // if no redirect needed, just return (example: already on /dashboard)
   // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
   //if (!redirectTo || !finished) return;
@@ -58,7 +58,7 @@ export const useGetSessionHook = ({
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && hasUser)
     ) {
-      Router.push(redirectTo);
+      Router.push(redirectTo).then(r => {});
       return;
     }
   }, [redirectTo, redirectIfFound, finished, hasUser, user]);

@@ -1,9 +1,7 @@
 import type { Credentials } from "google-auth-library/build/src/auth/credentials";
 import { google } from "googleapis";
 import { getSessionFromCookie } from "../../../../../lib/server/session";
-
-const clientId = process.env.GOOGLE_ID;
-const clientSecret = process.env.GOOGLE_SECRET;
+import { clientId, clientSecret } from "../../../../../config";
 
 type Token = { accessToken: string; refreshToken: string };
 const format = "metadata";
