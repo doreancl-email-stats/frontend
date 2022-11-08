@@ -1,13 +1,13 @@
-import LoginForm from "../components/newLayout/loginForm";
+import Login from "../components/newLayout/login";
 
-const Login = () => {
+const LoginPage = () => {
   return (
     <>
       <>
-        <LoginForm />
+        <Login />
       </>
     </>
   );
 };
 
-export default Login;
+export default LoginPage;

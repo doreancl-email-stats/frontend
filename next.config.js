@@ -23,6 +23,8 @@ module.exports = withBundleAnalyzer({
       'img.icons8.com',
       'images.unsplash.com',
       'tailwindui.com',
+      'mdbcdn.b-cdn.net',
+      'tuk-cdn.s3.amazonaws.com',
     ],
   },
   reactStrictMode: false,

@@ -1,8 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-
-const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
+import { API_URL_LOGIN } from "../../config";
 
 export default function Login() {
   return (
@@ -15,10 +14,12 @@ export default function Login() {
                 src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
                 className="w-full"
                 alt="Phone image"
+                width={500}
+                height={500}
               />
             </div>
             <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
-              <Link href="https://sites.google.com/view/emailstats/" passHref={true}>
+              <Link href={API_URL_LOGIN} passHref={true}>
                 <button
                   aria-label="Continue with google"
                   role="button"
@@ -27,6 +28,8 @@ export default function Login() {
                   <Image
                     src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg"
                     alt="google"
+                    width={30}
+                    height={30}
                   />
                   <p className="text-base font-medium ml-4 text-gray-700">
                     Continue with Google

@@ -2,7 +2,7 @@ import Router from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { Session } from "../types/userjwt";
-import { BFF_API_URL } from "../config";
+import { API_URL } from "../config";
 
 type UseUserProps = {
   redirectTo?: string;
@@ -22,14 +22,45 @@ export const getSession = async ({
 }: UseUserProps) => {
   console.log("getSession");
   //const { data, error } = useSWR("/api/user/", fetcher);
-  const data = await fetch(`${BFF_API_URL}/api/user/`);
-  console.log(BFF_API_URL, `${BFF_API_URL}/api/user/`);
-  console.log('/api/user', data.status, data.statusText);
+  const data = await fetch(`api/user/`);
+  console.log("/api/user", data.status, data.statusText);
   const response = await data.json();
   const error = null;
   const user = response?.user;
 
-  console.log(user)
+  console.log(user);
+  // if no redirect needed, just return (example: already on /dashboard)
+  // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
+  //if (!redirectTo || !finished) return;
+
+  // return error ? null : user;
+  return [user || null, error];
+};
+
+export const getSimpleSession = async () => {
+  console.log("getSession");
+  const data = await fetch(`api/simplecookie/`);
+  console.log("/api/simplecookie", data.status, data.statusText);
+  const response = await data.json();
+  const error = null;
+
+  console.log(response);
+  return [response || null, error];
+};
+
+export const getSessionFromBackend = async ({
+  redirectTo,
+  redirectIfFound,
+}: UseUserProps) => {
+  console.log("getSession");
+  //const { data, error } = useSWR("/api/user/", fetcher);
+  const data = await fetch(`${API_URL}/api/user/`);
+  console.log("/api/user", data.status, data.statusText);
+  const response = await data.json();
+  const error = null;
+  const user = response?.user;
+
+  console.log(user);
   // if no redirect needed, just return (example: already on /dashboard)
   // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
   //if (!redirectTo || !finished) return;
@@ -42,7 +73,7 @@ export const useGetSessionHook = ({
   redirectTo,
   redirectIfFound,
 }: UseUserProps): [Session | null, Error | undefined] => {
-  const { data, error } = useSWR(`${BFF_API_URL}/api/user/`, fetcher);
+  const { data, error } = useSWR(`api/user/`, fetcher);
   const user = data?.user;
   const finished = Boolean(data);
   const hasUser = Boolean(user);
@@ -58,7 +89,7 @@ export const useGetSessionHook = ({
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && hasUser)
     ) {
-      Router.push(redirectTo).then(r => {});
+      Router.push(redirectTo).then((r) => {});
       return;
     }
   }, [redirectTo, redirectIfFound, finished, hasUser, user]);

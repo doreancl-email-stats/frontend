@@ -1,5 +1,4 @@
 import useSWR from "swr";
-import { BFF_API_URL } from "../config";
 
 const fetcher = (url) =>
   fetch(url)
@@ -40,7 +39,7 @@ const useGenericEffect = ({ url }) => {
 const onGenericEffectWithParams = async ({ url, parameters }) => {
   //const { data, error } = fetch([url, parameters], fetcherWithParameters);
 
-  const res = await fetch(`${url}${parameters}`);
+  const res = await fetch(`api/${url}${parameters}`);
   const data: any = await res.json();
 
   return {
@@ -55,25 +54,25 @@ export const onGetUnreadEmails = async ({
   to = 0,
 }: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${BFF_API_URL}/stats/total_unread_emails/`,
+    url: `stats/total_unread_emails/`,
     parameters: `?from=${from}&to=${to}`,
   });
 };
 export const onGetPromotionsEmails = async ({ from, to }: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${BFF_API_URL}/stats/total_promotions_emails/`,
+    url: `stats/total_promotions_emails/`,
     parameters: `?from=${from}&to=${to}`,
   });
 };
 export const onGetReceivedEmails = async ({ from, to }: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${BFF_API_URL}/stats/total_received_emails/`,
+    url: `stats/total_received_emails/`,
     parameters: `?from=${from}&to=${to}`,
   });
 };
 export const onGetSentEmails = async ({ from, to }: TimestampBetween) => {
   return await onGenericEffectWithParams({
-    url: `${BFF_API_URL}/stats/total_sent_emails/`,
+    url: `stats/total_sent_emails/`,
     parameters: `?from=${from}&to=${to}`,
   });
 };
@@ -83,7 +82,7 @@ export const onGetReceivedEmailsHistogram = async ({
   unit,
 }: TimestampBetweenWithUnit) => {
   return await onGenericEffectWithParams({
-    url: `${BFF_API_URL}/stats/received_emails_histogram/`,
+    url: `stats/received_emails_histogram/`,
     parameters: `?from=${from}&to=${to}&unit=${unit}`,
   });
 };
@@ -93,7 +92,7 @@ export const onGetSentEmailsHistogram = async ({
   unit,
 }: TimestampBetweenWithUnit) => {
   return await onGenericEffectWithParams({
-    url: `${BFF_API_URL}/stats/sent_emails_histogram/`,
+    url: `stats/sent_emails_histogram/`,
     parameters: `?from=${from}&to=${to}&unit=${unit}`,
   });
 };
@@ -104,7 +103,7 @@ export const onGetTopInteractions = async ({
   groupBy,
 }: TimestampBetweenGrouped) => {
   const res = await onGenericEffectWithParams({
-    url: `${BFF_API_URL}/stats/top_interactions/`,
+    url: `stats/top_interactions/`,
     parameters: `?from=${from}&to=${to}&group_by=${groupBy}`,
   });
   for (let i = 0; i < res.data.length; i++) {

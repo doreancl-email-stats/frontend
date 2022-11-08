@@ -3,15 +3,15 @@ version: "3.9"
 services:
   web:
     build: .
-    command: >
-      sh -c "
-      ls
-      && npm install
-      && npm run dev
-      "
+    #command: >
+     # sh -c "
+     # ls
+     # && npm install
+     # && npm run prod
+     # "
     volumes:
       - .:/code
     ports:
-      - "3000:3000"
+      - "8081:3000"
     env_file:
-      - .env.local
+      - .env.development
