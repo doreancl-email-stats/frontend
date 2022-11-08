@@ -1,12 +1,12 @@
 import type { GetServerSideProps } from "next";
-import Layout from "../components/newLayout/layout";
 import { useAppContext } from "../context/AppWrapper";
 import React, { useEffect, useState } from "react";
-import { getSession } from "../lib/hooks-users";
 import { APP_STATE } from "../context/AppReducer";
+import { getSimpleSession } from "../lib/hooks-users";
+import Layout from "../components/newLayout/layout";
+import { validateCookie } from "../context/utils/cookie";
 
 const Index = ({ timestampCurrent, timestampPrevious }) => {
-  console.log("Index");
   const [state, dispatch] = useAppContext();
   const [session, setSession] = useState(null);
 
@@ -23,8 +23,9 @@ const Index = ({ timestampCurrent, timestampPrevious }) => {
     if (state.app_state == APP_STATE.READY) {
       //return window.location.assign("https://sites.google.com/view/emailstats/");
       (async () => {
-        const [session, error] = await getSession({});
-        setSession(session);
+        //const [session, error] = await getSession({});
+        //setSession(session);
+        const [session, error] = await getSimpleSession();
       })();
     }
   }, [state]);
@@ -46,7 +47,7 @@ const Index = ({ timestampCurrent, timestampPrevious }) => {
 
 export default Index;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const today = new Date();
 
   const timestampCurrent = {
@@ -69,6 +70,18 @@ export const getServerSideProps: GetServerSideProps = async () => {
       today.getDate()
     ).getTime(),
   };
+
+  const cookie = context.req.headers.cookie;
+  const { user, message } = validateCookie(cookie);
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {

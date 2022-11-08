@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 
 import type { LinkType } from "../types/types";
 
-const API_URL = process.env.NEXT_PUBLIC_RECIPES_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const getOnePost = async (
   slug: any
 ): Promise<LinkType[] | { notFound: true }> => {

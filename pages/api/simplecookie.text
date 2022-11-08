@@ -1,0 +1,25 @@
+import { API_URL } from "../../config";
+
+const onGenericEffectWithParams = async ({ url, parameters }) => {
+  const res = await fetch(`${url}${parameters}`);
+  return await res.json();
+};
+
+export default async function handler(@Request() req, @Response() res,) {
+  const { stat, ...params } = req.query;
+
+  console.log("--------simplecookieS------");
+  const lelo = await onGenericEffectWithParams({
+    url: `${API_URL}/simple/simplecookie`,
+    parameters: ``,
+  });
+  res.cookie("asd", "zxc");
+  res.cookie({
+    name: "123",
+    value: "654",
+    path: "/test",
+  });
+  console.log({ lelo });
+
+  res.status(200).json(lelo);
+}

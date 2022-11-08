@@ -7,9 +7,11 @@ const SECRET_KEY = process.env.JWT_SECRET || "";
 
 export const verifyToken = (jwtToken: string): null | JwtPayload | string => {
   try {
-    return verify(jwtToken, SECRET_KEY);
+    return verify(jwtToken, SECRET_KEY, {
+      ignoreExpiration: true,
+    });
   } catch (e) {
-    console.log('verifyToken e:', e);
+    console.log("verifyToken e:", e);
     return null;
   }
 };
