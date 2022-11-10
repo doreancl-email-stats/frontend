@@ -5,6 +5,7 @@ import { APP_STATE } from "../context/AppReducer";
 import { getSimpleSession } from "../lib/hooks-users";
 import Layout from "../components/newLayout/layout";
 import { validateCookie } from "../context/utils/cookie";
+import packageInfo from "../package.json";
 
 const Index = ({ timestampCurrent, timestampPrevious }) => {
   const [state, dispatch] = useAppContext();
@@ -30,18 +31,6 @@ const Index = ({ timestampCurrent, timestampPrevious }) => {
     }
   }, [state]);
 
-  useEffect(() => {
-    console.log("REDIRECT ????", state);
-    if (
-      state.app_state == APP_STATE.READY &&
-      null != session &&
-      !session?.profile
-    ) {
-      console.log("REDIRECT", session);
-      //return window.location.assign("https://sites.google.com/view/emailstats/");
-    }
-  }, [state, session]);
-
   return <>{state.app_state == APP_STATE.READY && <Layout />}</>;
 };
 
@@ -49,6 +38,8 @@ export default Index;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const today = new Date();
+
+  console.log("nameAndVersion", packageInfo.name, packageInfo.version);
 
   const timestampCurrent = {
     from: new Date(

@@ -42,6 +42,8 @@ const onGenericEffectWithParams = async ({ url, parameters }) => {
   const res = await fetch(`api/${url}${parameters}`);
   const data: any = await res.json();
 
+  console.log({ url, parameters }, res.status, res.statusText);
+
   return {
     loading: false,
     data,

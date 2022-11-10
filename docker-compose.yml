@@ -12,6 +12,10 @@ services:
     volumes:
       - .:/code
     ports:
-      - "8081:3000"
+      - "8080:3000"
     env_file:
       - .env.development
+    #network_mode: host
+    extra_hosts:
+      - "app.emailstats.com:192.168.65.2"
+      - "back.emailstats.com:192.168.65.2"
