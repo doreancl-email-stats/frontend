@@ -60,6 +60,7 @@ export default function Dashboard() {
       return;
     }
     (async () => {
+      console.log("state.timestamps", state.timestamps);
       if (!state.timestamps) {
         return;
       }

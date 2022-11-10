@@ -30,18 +30,6 @@ const Index = ({ timestampCurrent, timestampPrevious }) => {
     }
   }, [state]);
 
-  useEffect(() => {
-    console.log("REDIRECT ????", state);
-    if (
-      state.app_state == APP_STATE.READY &&
-      null != session &&
-      !session?.profile
-    ) {
-      console.log("REDIRECT", session);
-      //return window.location.assign("https://sites.google.com/view/emailstats/");
-    }
-  }, [state, session]);
-
   return <>{state.app_state == APP_STATE.READY && <Layout />}</>;
 };
 
