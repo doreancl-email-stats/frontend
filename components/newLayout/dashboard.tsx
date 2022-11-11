@@ -57,7 +57,7 @@ export default function Dashboard() {
 
   useEffect(() => {
 
-    console.log("-------Dashboard----------");
+    console.log("-------Dashboard----------", state);
 
     if (!state.timestamps) {
       return;
