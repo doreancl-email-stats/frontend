@@ -56,6 +56,9 @@ export default function Dashboard() {
   const [session, error] = useState(null);
 
   useEffect(() => {
+
+    console.log("-------Dashboard----------");
+
     if (!state.timestamps) {
       return;
     }
@@ -70,6 +73,8 @@ export default function Dashboard() {
       if (!state.timestamps.previous) {
         return;
       }
+
+      console.log("-------Start Calling----------");
 
       const current = state.timestamps.current;
       const previous = state.timestamps.previous;

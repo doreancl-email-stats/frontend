@@ -4,6 +4,8 @@ import Dashboard from "./dashboard";
 import React from "react";
 
 export default function Layout() {
+  console.log("-------Layout----------");
+
   return (
     <>
       <div className="min-h-full">

@@ -12,6 +12,8 @@ const Index = ({ timestampCurrent, timestampPrevious }) => {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
+    console.log("nameAndVersion", packageInfo.name, packageInfo.version);
+
     console.log("set_timestamps ????", timestampCurrent, timestampPrevious);
 
     dispatch({

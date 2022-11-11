@@ -55,6 +55,9 @@ export const onGetUnreadEmails = async ({
   from = 0,
   to = 0,
 }: TimestampBetween) => {
+
+  console.log("-------onGetUnreadEmails----------");
+
   return await onGenericEffectWithParams({
     url: `stats/total_unread_emails/`,
     parameters: `?from=${from}&to=${to}`,
