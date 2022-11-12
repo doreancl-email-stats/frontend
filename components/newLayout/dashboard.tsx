@@ -55,39 +55,39 @@ export default function Dashboard() {
   const [sentEmailsHistogram, setSentEmailsHistogram] = useState(ble);
   const [session, error] = useState(null);
 
+  const timestamps = state.timestamps;
+
   useEffect(() => {
+    console.log("-------Dashboard----------", timestamps);
 
-    console.log("-------Dashboard----------", state);
-
-    if (!state.timestamps) {
+    if (!timestamps) {
       return;
     }
 
     const fetchData = async () => {
-      setUnreadEmails(await onGetUnreadEmails(state.timestamps.current));
-    }
+      setUnreadEmails(await onGetUnreadEmails(timestamps.current));
+    };
     // call the function
     fetchData()
       // make sure to catch any error
       .catch(console.error);
 
-
     (async () => {
-      console.log("state.timestamps", state.timestamps);
-      if (!state.timestamps) {
+      console.log("timestamps", timestamps);
+      if (!timestamps) {
         return;
       }
-      if (!state.timestamps.current) {
+      if (!timestamps.current) {
         return;
       }
-      if (!state.timestamps.previous) {
+      if (!timestamps.previous) {
         return;
       }
 
       console.log("-------Start Calling----------");
 
-      const current = state.timestamps.current;
-      const previous = state.timestamps.previous;
+      const current = timestamps.current;
+      const previous = timestamps.previous;
 
       setUnreadEmails(await onGetUnreadEmails(current));
       setUnreadEmailsPrevious(await onGetUnreadEmails(previous));
@@ -126,7 +126,7 @@ export default function Dashboard() {
         })
       );
     })();
-  }, [state.timestamps]);
+  }, [timestamps]);
 
   useEffect(() => {
     (async () => {
