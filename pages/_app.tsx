@@ -3,18 +3,9 @@ import type { AppProps } from "next/app";
 import { AppWrapper } from "../context/AppWrapper";
 import { SWRConfig } from "swr";
 import React from "react";
-import Bugsnag from "@bugsnag/js";
-import BugsnagPluginReact from "@bugsnag/plugin-react";
-import { BUGSNAG_APIKEY } from "../config";
+import ErrorBoundary from "../components/bugsnag/errorBoundaty";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  Bugsnag.start({
-    apiKey: BUGSNAG_APIKEY,
-    plugins: [new BugsnagPluginReact()],
-  });
-
-  const ErrorBoundary = Bugsnag.getPlugin("react").createErrorBoundary(React);
-
   return (
     <ErrorBoundary>
       <AppWrapper>
@@ -39,7 +30,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         `}</style>
       </AppWrapper>
     </ErrorBoundary>
-
     /*  <SWRConfig
           value={{
             fetcher: fetchJson,
