@@ -39,7 +39,7 @@ const headersTopByDomain = [
   { name: "interactions", display: "Interactions" },
 ];
 
-export default function Dashboard() {
+export default function Dashboard({timestamps}) {
   const [state, dispatch] = useAppContext();
   const [unreadEmails, setUnreadEmails] = useState(bla);
   const [promotionsEmails, setPromotionsEmails] = useState(bla);
@@ -54,8 +54,6 @@ export default function Dashboard() {
   const [receivedEmailsHistogram, setReceivedEmailsHistogram] = useState(ble);
   const [sentEmailsHistogram, setSentEmailsHistogram] = useState(ble);
   const [session, error] = useState(null);
-
-  const timestamps = state.timestamps;
 
   useEffect(() => {
     console.log("-------Dashboard----------", timestamps);

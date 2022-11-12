@@ -2,9 +2,16 @@ import { Header } from "./header";
 import Navbar from "./navbar";
 import Dashboard from "./dashboard";
 import React from "react";
+import { useAppContext } from "../../context/AppWrapper";
 
 export default function Layout() {
   console.log("-------Layout----------");
+  const [state, dispatch] = useAppContext();
+
+  const timestamps = state.timestamps || {
+    current: { from: 1665532800000, to: 1668262321435 },
+    previous: { from: 1662940800000, to: 1665532800000 },
+  };
 
   return (
     <>
@@ -30,7 +37,7 @@ export default function Layout() {
           <div className="mx-auto max-w-7xl py-3 sm:px-6 lg:px-8">
             <div className="">
               <div className="rounded-lg ">
-                <Dashboard />
+                <Dashboard timestamps={timestamps} />
               </div>
             </div>
           </div>

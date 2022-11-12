@@ -14,6 +14,7 @@ const Index = ({ timestampCurrent, timestampPrevious }) => {
   useEffect(() => {
     console.log("nameAndVersion", packageInfo.name, packageInfo.version);
 
+    return;
     console.log("set_timestamps ????", timestampCurrent, timestampPrevious);
 
     dispatch({
