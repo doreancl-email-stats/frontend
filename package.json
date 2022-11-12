@@ -10,6 +10,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bugsnag/js": "^7.18.0",
+    "@bugsnag/plugin-react": "^7.18.0",
     "@hapi/iron": "^7.0.0",
     "@tanstack/react-table": "^8.5.19",
     "@types/ramda": "^0.28.18",
@@ -70,7 +72,6 @@
     "eslint-plugin-tailwindcss": "^3.6.2",
     "eslint-plugin-testing-library": "^5.9.1",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "msw": "^0.47.4",
     "postcss": "^8.4.18",
     "react-easy-swipe": "^0.0.22",
     "react-hook-form": "^7.38.0",
@@ -78,8 +79,5 @@
     "tailwindcss": "^3.2.1",
     "typescript": "^4.8.4",
     "yup": "^0.32.11"
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }
