@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bugsnag/js": "^7.18.0",
     "@hapi/iron": "^7.0.0",
     "@tanstack/react-table": "^8.5.19",
     "@types/ramda": "^0.28.18",
