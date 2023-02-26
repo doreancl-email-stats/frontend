@@ -1,5 +1,5 @@
 import React from "react";
-import { BUGSNAG_APIKEY } from "../../config";
+import { PUBLIC_BUGSNAG_APIKEY } from "../../config";
 import Bugsnag from "@bugsnag/js";
 import BugsnagPluginReact from "@bugsnag/plugin-react";
 
@@ -10,9 +10,9 @@ type Props = {
 export default function ErrorBoundary({ children }: Props) {
   console.log("-------Layout----------");
 
-  if (BUGSNAG_APIKEY) {
+  if (PUBLIC_BUGSNAG_APIKEY) {
     Bugsnag.start({
-      apiKey: BUGSNAG_APIKEY,
+      apiKey: PUBLIC_BUGSNAG_APIKEY,
       plugins: [new BugsnagPluginReact()],
     });
 

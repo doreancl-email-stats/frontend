@@ -10,6 +10,7 @@ export enum APP_STATE {
   LOADING = "LOADING",
   READY = "READY",
 }
+
 export type State = {
   app_state: APP_STATE;
   stats: Stats;
@@ -40,9 +41,9 @@ export type Action =
   | { type: "new_app_state"; value: APP_STATE };
 
 export const AppReducer = (state: State, action: Action): State => {
+  console.log("AppReducer", action.type, action.value);
   switch (action.type) {
     case "new_app_state": {
-      console.log("new_app_state", action.value);
       return {
         ...state,
         app_state: action.value,
@@ -64,7 +65,6 @@ export const AppReducer = (state: State, action: Action): State => {
       const found = state.messages.find(
         (message) => message.id === action.value.id
       );
-      console.log(33333, undefined != found, "add_message", action.value.id);
 
       if (undefined != found) {
         return state;

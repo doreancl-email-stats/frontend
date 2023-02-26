@@ -1,12 +1,12 @@
 import { StatusCodes } from "http-status-codes";
 
 import type { LinkType } from "../types/types";
+import { PULBIC_API_URL } from "../config";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const getOnePost = async (
   slug: any
 ): Promise<LinkType[] | { notFound: true }> => {
-  const res = await fetch(`${API_URL}/links/${slug}`);
+  const res = await fetch(`${PULBIC_API_URL}/links/${slug}`);
   const data: any = await res.json();
   if (!data) {
     return {
@@ -20,7 +20,7 @@ export const getAllPosts = async (
   _no?: string[] | undefined
 ): Promise<(LinkType[] | any)[]> => {
   try {
-    const res = await fetch(`${API_URL}/links/`);
+    const res = await fetch(`${PULBIC_API_URL}/links/`);
     const dataArray: any[] = await res.json();
 
     if (!dataArray) {
@@ -37,7 +37,7 @@ export const getAllPosts = async (
 export const getAllStats = async (
   _no?: string[] | undefined
 ): Promise<(LinkType[] | any)[]> => {
-  const res = await fetch(`${API_URL}/stats/`);
+  const res = await fetch(`${PULBIC_API_URL}/stats/`);
   const dataArray: any[] = await res.json();
 
   if (!dataArray) {
@@ -51,7 +51,7 @@ export const putLink = async (
   id: any,
   lynkPayload: any
 ): Promise<(LinkType[] | any)[]> => {
-  const res = await fetch(`${API_URL}/links/${id}`, {
+  const res = await fetch(`${PULBIC_API_URL}/links/${id}`, {
     body: lynkPayload,
     headers: {
       'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export const putLink = async (
 export const postLink = async (
   lynkPayload: any
 ): Promise<(LinkType[] | any)[]> => {
-  const res = await fetch(`${API_URL}/links/`, {
+  const res = await fetch(`${PULBIC_API_URL}/links/`, {
     body: lynkPayload,
     headers: {
       'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export const postLink = async (
 };
 
 export const deleteLink = async (id: string) => {
-  const res = await fetch(`${API_URL}/links/${id}`, {
+  const res = await fetch(`${PULBIC_API_URL}/links/${id}`, {
     headers: {
       'Content-Type': 'application/json',
     },

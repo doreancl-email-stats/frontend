@@ -1,14 +1,18 @@
 import type { Credentials } from "google-auth-library/build/src/auth/credentials";
 import { google } from "googleapis";
-import { API_URL, clientId, clientSecret } from "../../../config";
+import {
+  GOOGLE_SECRET,
+  PUBLIC_GOOGLE_ID,
+  PULBIC_API_URL,
+} from "../../../config";
 
 type Token = { accessToken: string; refreshToken: string };
 const format = "metadata";
 
 const getAuth = (token: Token) => {
   const auth = new google.auth.OAuth2({
-    clientId,
-    clientSecret,
+    clientId: PUBLIC_GOOGLE_ID,
+    clientSecret: GOOGLE_SECRET,
   });
 
   const credentials: Credentials = {
@@ -40,7 +44,7 @@ export default async function handler(req, res) {
   const url = `${stat}?${encodeData(params)}`;
 
   const lelo = await onGenericEffectWithParams({
-    url: `${API_URL}/stats/${stat}`,
+    url: `${PULBIC_API_URL}/stats/${stat}`,
     parameters: `?${encodeData(params)}`,
   });
 

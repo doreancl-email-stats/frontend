@@ -3,15 +3,12 @@ import Navbar from "./navbar";
 import Dashboard from "./dashboard";
 import React from "react";
 import { useAppContext } from "../../context/AppWrapper";
+import { APP_STATE } from "../../context/AppReducer";
 
-export default function Layout() {
+export default function Layout({ timestamps }) {
   console.log("-------Layout----------");
-  const [state, dispatch] = useAppContext();
 
-  const timestamps = state.timestamps || {
-    current: { from: 1665532800000, to: 1668262321435 },
-    previous: { from: 1662940800000, to: 1665532800000 },
-  };
+  const [state, dispatch] = useAppContext();
 
   return (
     <>
@@ -37,7 +34,13 @@ export default function Layout() {
           <div className="mx-auto max-w-7xl py-3 sm:px-6 lg:px-8">
             <div className="">
               <div className="rounded-lg ">
-                <Dashboard timestamps={timestamps} />
+                {state.app_state == APP_STATE.READY ? (
+                  <Dashboard timestamps={timestamps} />
+                ) : (
+                  <div className="text-center">
+                    <p>Loading</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

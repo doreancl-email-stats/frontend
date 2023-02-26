@@ -5,7 +5,6 @@ import { Session } from "../../types/userjwt";
 export const validateCookie = (strinCookies: string) => {
   try {
     const cookies = cookie.parse(strinCookies);
-    console.log("validateCookie", cookies);
     if (cookies.jwt != null) {
       const session = verifyToken(cookies.jwt) as Session;
       if (session && session.user) {

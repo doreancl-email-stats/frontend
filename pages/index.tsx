@@ -1,40 +1,28 @@
 import type { GetServerSideProps } from "next";
 import { useAppContext } from "../context/AppWrapper";
 import React, { useEffect, useState } from "react";
-import { APP_STATE } from "../context/AppReducer";
-import { getSimpleSession } from "../lib/hooks-users";
 import Layout from "../components/newLayout/layout";
 import { validateCookie } from "../context/utils/cookie";
 import packageInfo from "../package.json";
 
-const Index = ({ timestampCurrent, timestampPrevious }) => {
+const Index = ({ timestamps }) => {
   const [state, dispatch] = useAppContext();
   const [session, setSession] = useState(null);
 
   useEffect(() => {
     console.log("nameAndVersion", packageInfo.name, packageInfo.version);
 
-    return;
-    console.log("set_timestamps ????", timestampCurrent, timestampPrevious);
-
     dispatch({
       type: "set_timestamps",
-      value: { current: timestampCurrent, previous: timestampPrevious },
+      value: { current: timestamps.current, previous: timestamps.previous },
     });
-  }, [timestampCurrent, timestampPrevious, dispatch]);
+  }, [timestamps, dispatch]);
 
-  useEffect(() => {
-    if (state.app_state == APP_STATE.READY) {
-      //return window.location.assign("https://sites.google.com/view/emailstats/");
-      (async () => {
-        //const [session, error] = await getSession({});
-        //setSession(session);
-        const [session, error] = await getSimpleSession();
-      })();
-    }
-  }, [state]);
-
-  return <>{state.app_state == APP_STATE.READY && <Layout />}</>;
+  return (
+    <>
+      <Layout timestamps={timestamps} />
+    </>
+  );
 };
 
 export default Index;
@@ -42,6 +30,7 @@ export default Index;
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const today = new Date();
 
+  console.log("---------Index-----------");
   console.log("nameAndVersion", packageInfo.name, packageInfo.version);
 
   const timestampCurrent = {
@@ -65,8 +54,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     ).getTime(),
   };
 
+  const timestamps = {
+    previous: timestampCurrent,
+    current: timestampPrevious,
+  };
+
   const cookie = context.req.headers.cookie;
   const { user, message } = validateCookie(cookie);
+  console.log("validateCookie", { profile: user?.profile._json, message });
 
   if (!user) {
     return {
@@ -79,8 +74,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      timestampCurrent,
-      timestampPrevious,
+      timestamps,
     },
   };
 };

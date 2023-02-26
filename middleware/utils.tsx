@@ -2,12 +2,11 @@ import cookie from "cookie";
 import type { IncomingHttpHeaders } from "http";
 import type { JwtPayload } from "jsonwebtoken";
 import { verify } from "jsonwebtoken";
-
-const SECRET_KEY = process.env.JWT_SECRET || "";
+import { JWT_SECRET } from "../config";
 
 export const verifyToken = (jwtToken: string): null | JwtPayload | string => {
   try {
-    return verify(jwtToken, SECRET_KEY, {
+    return verify(jwtToken, JWT_SECRET, {
       ignoreExpiration: true,
     });
   } catch (e) {

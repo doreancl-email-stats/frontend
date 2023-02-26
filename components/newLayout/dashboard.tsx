@@ -62,14 +62,6 @@ export default function Dashboard({timestamps}) {
       return;
     }
 
-    const fetchData = async () => {
-      setUnreadEmails(await onGetUnreadEmails(timestamps.current));
-    };
-    // call the function
-    fetchData()
-      // make sure to catch any error
-      .catch(console.error);
-
     (async () => {
       console.log("timestamps", timestamps);
       if (!timestamps) {

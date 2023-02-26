@@ -2,7 +2,7 @@ import Router from "next/router";
 import { useEffect } from "react";
 import useSWR from "swr";
 import { Session } from "../types/userjwt";
-import { API_URL } from "../config";
+import { PULBIC_API_URL } from "../config";
 
 type UseUserProps = {
   redirectTo?: string;
@@ -28,7 +28,7 @@ export const getSession = async ({
   const error = null;
   const user = response?.user;
 
-  console.log(user);
+  console.log({ user });
   // if no redirect needed, just return (example: already on /dashboard)
   // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
   //if (!redirectTo || !finished) return;
@@ -54,7 +54,7 @@ export const getSessionFromBackend = async ({
 }: UseUserProps) => {
   console.log("getSession");
   //const { data, error } = useSWR("/api/user/", fetcher);
-  const data = await fetch(`${API_URL}/api/user/`);
+  const data = await fetch(`${PULBIC_API_URL}/api/user/`);
   console.log("/api/user", data.status, data.statusText);
   const response = await data.json();
   const error = null;

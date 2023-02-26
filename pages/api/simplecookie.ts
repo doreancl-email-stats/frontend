@@ -1,4 +1,4 @@
-import { API_URL } from "../../config";
+import { PULBIC_API_URL } from "../../config";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const onGenericEffectWithParams = async ({ url, parameters }) => {
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   };
 
-  const simpleRes = await fetch(`${API_URL}/simple/simplecookie`, opts);
+  const simpleRes = await fetch(`${PULBIC_API_URL}/simple/simplecookie`, opts);
   const response = await simpleRes.json();
 
   res.status(simpleRes.status).json(response);

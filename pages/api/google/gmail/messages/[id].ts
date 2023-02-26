@@ -1,15 +1,15 @@
 import type { Credentials } from "google-auth-library/build/src/auth/credentials";
 import { google } from "googleapis";
 import { getSessionFromCookie } from "../../../../../lib/server/session";
-import { clientId, clientSecret } from "../../../../../config";
+import { GOOGLE_SECRET, PUBLIC_GOOGLE_ID } from "../../../../../config";
 
 type Token = { accessToken: string; refreshToken: string };
 const format = "metadata";
 
 const getAuth = (token: Token) => {
   const auth = new google.auth.OAuth2({
-    clientId,
-    clientSecret,
+    clientId: PUBLIC_GOOGLE_ID,
+    clientSecret: GOOGLE_SECRET,
   });
 
   const credentials: Credentials = {
